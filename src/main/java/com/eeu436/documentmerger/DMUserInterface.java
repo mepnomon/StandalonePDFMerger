@@ -8,15 +8,19 @@ package com.eeu436.documentmerger;
 import javax.swing.JFileChooser;
 
 /**
- *
- * @author Mepnomon
+ * User Interface for Document Merger
+ * @author D.B. Dressler
  */
 public class DMUserInterface extends javax.swing.JFrame {
 
+    //Global variables
+    DocumentMerger merger;
     /**
      * Creates new form DMUserInterface
      */
     public DMUserInterface() {
+        //instantiate
+        merger = new DocumentMerger();
         initComponents();
     }
 
@@ -149,23 +153,49 @@ public class DMUserInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * 
+     * @param evt 
+     */
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
+        System.out.println("add button pressed");
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(jMenu3);
-        System.out.println("add button pressed");
+        String filePath = chooser.getSelectedFile().toString();
+        System.out.println("File:" + filePath);
+        
+        //check if file is pdf
+        if(!filePath.substring(filePath.length()-3, filePath.length()).equals("pdf")){
+            System.out.println("Error, only load .pdf files.");
+            merger.addFilesToList(filePath);
+        } else {
+            //JPopUpMenu popup
+        }
     }//GEN-LAST:event_addButtonActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         // TODO add your handling code here:
         // get selected index
         // remove from list
     }//GEN-LAST:event_removeButtonActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void mergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_mergeButtonActionPerformed

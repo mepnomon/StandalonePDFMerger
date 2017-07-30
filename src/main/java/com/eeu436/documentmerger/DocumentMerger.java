@@ -50,7 +50,7 @@ public class DocumentMerger {
      * Utility method to that merges PDF files
      * @param filePath
      */
-    public void addFilesToMerge(String filePath){
+    public void addFilesToList(String filePath){
         
         //add to a new file
         File file = new File(filePath);
@@ -88,7 +88,7 @@ public class DocumentMerger {
     /**
      * Merges supplied documents and saves them to file location.
      */
-    public void outputMergedFile(){
+    public void mergeFile(){
         
         //PDFMergerUtility mergerUtil = new PDFMergerUtility();
         // 

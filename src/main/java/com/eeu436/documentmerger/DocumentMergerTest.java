@@ -15,14 +15,14 @@ public class DocumentMergerTest {
         String file2 = "C:\\Users\\Mepnomon\\Desktop\\DocumentMerger\\Certificates Dorian Dressler.pdf";
         //String file3 = "C:\\Users\\Mepnomon\\Desktop\\DocumentMerger\\Page_9.pdf";
         //String file4 = "C:\\Users\\Mepnomon\\Desktop\\DocumentMerger\\Page_10.pdf";
-        merger.addFilesToMerge(file1);
-        merger.addFilesToMerge(file2);
+        merger.addFilesToList(file1);
+        merger.addFilesToList(file2);
         //merger.addFilesToMerge(file3);
         //merger.addFilesToMerge(file4);
         merger.setOutputPath("C:\\Users\\Mepnomon\\Desktop\\DocumentMerger\\DDressler_Diplomas.pdf");
         System.out.println("Total pages: " + merger.getTotalPages());
         merger.displayDocumentList();
-        merger.outputMergedFile();
+        merger.mergeFile();
         System.out.println("Total pages after fileWrite: " + merger.getTotalPages());
     }   
 }
