@@ -46,6 +46,7 @@ public class DMUserInterface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PDFMerger (c) 2017 D.B.Dressler");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setName("MainFrame"); // NOI18N
         setResizable(false);
 
