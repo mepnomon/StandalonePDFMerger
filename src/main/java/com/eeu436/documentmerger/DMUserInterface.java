@@ -19,7 +19,7 @@ public class DMUserInterface extends javax.swing.JFrame {
      * Creates new form DMUserInterface
      */
     public DMUserInterface() {
-        //instantiate
+        //instantiate merger
         merger = new DocumentMerger();
         initComponents();
     }
@@ -167,19 +167,24 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
+        
+        // Debug
         System.out.println("add button pressed");
+        // File Chooser
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(jMenu3);
+        // get file path
         String filePath = chooser.getSelectedFile().toString();
         System.out.println("File:" + filePath);
         
-        //check if file extension pdf
+        //check if file extension NOT pdf
         if(!filePath.substring(filePath.length()-3, filePath.length()).equals("pdf")){
             System.out.println("Error, only load .pdf files.");
+            // throw an error here
         } else {
+            // pass file path to merger
             merger.addFilesToList(filePath);
             System.out.println("Adding: " + filePath);
-            //JPopUpMenu popup
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
