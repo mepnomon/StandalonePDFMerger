@@ -162,7 +162,7 @@ public class DMUserInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
     /**
-     * 
+     * Select and add files to merge.
      * @param evt 
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -173,11 +173,12 @@ public class DMUserInterface extends javax.swing.JFrame {
         String filePath = chooser.getSelectedFile().toString();
         System.out.println("File:" + filePath);
         
-        //check if file is pdf
+        //check if file extension pdf
         if(!filePath.substring(filePath.length()-3, filePath.length()).equals("pdf")){
             System.out.println("Error, only load .pdf files.");
-            merger.addFilesToList(filePath);
         } else {
+            merger.addFilesToList(filePath);
+            System.out.println("Adding: " + filePath);
             //JPopUpMenu popup
         }
     }//GEN-LAST:event_addButtonActionPerformed
