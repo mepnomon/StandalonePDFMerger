@@ -235,8 +235,11 @@ public class DMUserInterface extends javax.swing.JFrame {
      * @param evt 
      */
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
-        merger.moveFileDown(fileList.getSelectedIndex());
-        updateGUI();
+        
+        if(fileList.getSelectedIndex() < documentPaths.size()){
+            merger.moveFileDown(fileList.getSelectedIndex());
+            updateGUI();
+        }
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
     /**
@@ -308,8 +311,11 @@ public class DMUserInterface extends javax.swing.JFrame {
      * @param evt 
      */
     private void moveUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveUpButtonActionPerformed
-        merger.moveFileUp(fileList.getSelectedIndex());
-        updateGUI();
+        
+        if(fileList.getSelectedIndex() > 0){
+            merger.moveFileUp(fileList.getSelectedIndex());
+            updateGUI();
+        }
     }//GEN-LAST:event_moveUpButtonActionPerformed
 
     /**
