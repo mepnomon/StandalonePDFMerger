@@ -291,9 +291,15 @@ public class DMUserInterface extends javax.swing.JFrame {
     private void mergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeButtonActionPerformed
         
         //request output location:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showSaveDialog(jMenu3);
         
+        String outputPath = chooser.getSelectedFile().toString();
+        if(!outputPath.substring(outputPath.length()-3, outputPath.length()).equals("pdf")){
+            outputPath += ".pdf";
+        }
         //dummy path
-        String outputPath = "C:\\Users\\Mepnomon\\Desktop\\output.pdf";
+        //String outputPath = "C:\\Users\\Mepnomon\\Desktop\\output.pdf";
         // set the path
         merger.setOutputPath(outputPath);
         // merge the files
