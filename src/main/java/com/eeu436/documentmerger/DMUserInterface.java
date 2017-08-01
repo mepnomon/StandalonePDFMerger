@@ -252,11 +252,8 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
-        boolean isValid = false;
-        String filePath = "moo";
+        String filePath = "";
         //nt returnVal = fil
-        // Debug
-        System.out.println("add button pressed");
         // File Chooser
         JFileChooser chooser = new JFileChooser();
         int returnVal = chooser.showOpenDialog(jMenu3);
@@ -267,34 +264,13 @@ public class DMUserInterface extends javax.swing.JFrame {
             statusPane.setText("Adding: " + filePath);
             if(!filePath.substring(filePath.length()-3, 
                 filePath.length()).equals("pdf")){
-                isValid = false;
-                System.out.println("Error, only load .pdf files.");
-                statusPane.setText("ERROR, cannot load file.");
+                statusPane.setText("File must be PDF.");
             // throw an error here
             } else {
-                isValid = true;
-                // pass file path to merger
-                System.out.println("Adding: " + filePath);
-                
+                merger.addFilesToList(filePath);
+                statusPane.setText("File added: " + filePath);
             }
          }
-         
-         statusPane.setText("you are here");
-         
-         if(isValid){
-                merger.addFilesToList(filePath);
-                statusPane.setText("Passing to merger: " + filePath  );
-            }
-
-
-
-        //chooser.showOpenDialog(jMenu3);
-        // get file path \ moo is a test value
-        //String filePath = "moo";
-        //filePath = chooser.getSelectedFile().toString();
-        
-        // Check if selected file's extension NOT pdf
-        
         // update list
         updateGUI();
     }//GEN-LAST:event_addButtonActionPerformed

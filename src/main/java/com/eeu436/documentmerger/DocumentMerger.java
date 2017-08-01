@@ -127,7 +127,6 @@ public class DocumentMerger {
      * @param filePath the file's path
      */
     public void addFilesToList(String filePath){
-        
         //add to a new file
         File file = new File(filePath);
         try {
@@ -136,12 +135,10 @@ public class DocumentMerger {
             // 
             documentList.add(localDocument);
             documentNames.add(filePath);
-            // 
-            System.out.println("Added PDF " + filePath);
         } catch (IOException ex) {
             
             Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
     
     /**
