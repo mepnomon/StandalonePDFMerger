@@ -27,10 +27,14 @@ public class DMUserInterface extends javax.swing.JFrame {
     public DMUserInterface() {
         //instantiate merger
         merger = new DocumentMerger();
+        // Control variable for merger button
         mergeEnabled = false;
+        // Control variable for remove button
         removeEnabled = false;
+        // List of document paths
         documentPaths = new DefaultListModel();
         initComponents();
+        // Set gui defaults
         setDefaults();
     }
 
@@ -88,6 +92,11 @@ public class DMUserInterface extends javax.swing.JFrame {
         });
 
         moveUpButton.setText("Move up");
+        moveUpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moveUpButtonActionPerformed(evt);
+            }
+        });
 
         moveDownButton.setText("Move Down");
         moveDownButton.addActionListener(new java.awt.event.ActionListener() {
@@ -176,38 +185,58 @@ public class DMUserInterface extends javax.swing.JFrame {
     }
     
     /**
-     * 
+     * Updates the GUI.
+     * Call this method after performing an operation.
      */
     private void updateGUI(){
+        
+        // Get list of documents in memory
         ArrayList<String> localDocumentList = merger.getList();
+        // Clear the Paths displayed in GUI
         documentPaths.clear();
+        
+        // Add all documents to GUI
         for(int i = 0; i < localDocumentList.size(); i++){
             documentPaths.add(i, localDocumentList.get(i));
         }
+        
+        // Add to JLIst - actually displays in GUI
         fileList.setModel(documentPaths);
         
-        //if more than 1 document in list
-        if(documentPaths.size() > 1){
-            //enable merge button
-            mergeEnabled = true;
-            mergeButton.setEnabled(mergeEnabled);
-            //enable remove button
-            removeEnabled = true;
-            removeButton.setEnabled(mergeEnabled);
-        } else {
-            mergeEnabled = false;
-            mergeButton.setEnabled(mergeEnabled);
-            removeEnabled = false;
-            removeButton.setEnabled(removeEnabled);
-            
+        // Check if dummy file name present
+        boolean dummyFileName = true;
+        if(!localDocumentList.get(0).equals(merger.dummyString)){
+            dummyFileName = false;
         }
+        
+        // Enable/Disable buttons
+        //if 1 documents in list and it's not the dummy
+        if(documentPaths.size() == 1 && !dummyFileName){
+            // Enable remove button
+            removeEnabled = true;
+        } else if(documentPaths.size() > 1){ //more than 1 file present
+            // Enable remove and merge
+            removeEnabled = true;
+            mergeEnabled = true;
+            
+        } else { // no files present
+            // Disable buttons
+            mergeEnabled = false;
+            removeEnabled = false;  
+        }
+        
+        // Enable/Disable buttons
+        mergeButton.setEnabled(mergeEnabled);
+        removeButton.setEnabled(removeEnabled);
     }
+    
     /**
      * 
      * @param evt 
      */
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
-        // TODO add your handling code here:
+        merger.moveFileDown(fileList.getSelectedIndex());
+        updateGUI();
     }//GEN-LAST:event_moveDownButtonActionPerformed
 
     /**
@@ -227,8 +256,10 @@ public class DMUserInterface extends javax.swing.JFrame {
         filePath = chooser.getSelectedFile().toString();
         System.out.println("File:" + filePath);
         
-        //check if file extension NOT pdf
-        if(!filePath.substring(filePath.length()-3, filePath.length()).equals("pdf")){
+        // Check if selected file's extension NOT pdf
+        if(!filePath.substring(filePath.length()-3, 
+                filePath.length()).equals("pdf")){
+            
             System.out.println("Error, only load .pdf files.");
             // throw an error here
         } else {
@@ -241,20 +272,22 @@ public class DMUserInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_addButtonActionPerformed
 
     /**
-     * 
+     * Performs functionality when remove button is pressed.
      * @param evt 
      */
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        // TODO add your handling code here:
-        // get selected index
-        // remove from list
+        
+        merger.removeFileFromList(fileList.getSelectedIndex());
+        updateGUI();
     }//GEN-LAST:event_removeButtonActionPerformed
 
     /**
-     * 
+     * Performs functionality when merge button is pressed.
      * @param evt 
      */
     private void mergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeButtonActionPerformed
+        
+        //request output location:
         
         //dummy path
         String outputPath = "C:\\Users\\Mepnomon\\Desktop\\output.pdf";
@@ -266,11 +299,18 @@ public class DMUserInterface extends javax.swing.JFrame {
         documentPaths.clear();
         //clear merger lists
         merger.clearLists();
-        
         //update gui
         updateGUI();
-        
     }//GEN-LAST:event_mergeButtonActionPerformed
+
+    /**
+     * 
+     * @param evt 
+     */
+    private void moveUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveUpButtonActionPerformed
+        merger.moveFileUp(fileList.getSelectedIndex());
+        updateGUI();
+    }//GEN-LAST:event_moveUpButtonActionPerformed
 
     /**
      * @param args the command line arguments

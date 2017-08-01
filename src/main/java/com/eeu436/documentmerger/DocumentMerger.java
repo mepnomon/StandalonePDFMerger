@@ -20,6 +20,7 @@ public class DocumentMerger {
     private ArrayList<String> documentNames;
     private PDDocument outputDocument;
     private String outputPath = null;
+    String dummyString = "Your documents will appear in this list...";
     
    
     /**
@@ -106,6 +107,11 @@ public class DocumentMerger {
             // Close writer
             outputDocument.close();
             
+            // Close all documents in list
+            for(PDDocument d : documentList){
+                d.close();
+            }
+            
             // Clear lists
             documentList.clear();
             documentNames.clear();
@@ -157,7 +163,7 @@ public class DocumentMerger {
        
         if(documentNames.isEmpty()){
             ArrayList<String> temp = new ArrayList<>();
-            temp.add("Your documents will appear in this list...");
+            temp.add(dummyString);
             return temp;
         }
         
@@ -170,18 +176,35 @@ public class DocumentMerger {
      */
     public void moveFileUp(int index){
         //TODO: Add code
-        System.out.println("Moves a file up.");
-        System.out.println("implement");
+        if(index > 0){
+            String name1 = documentNames.get(index);
+            PDDocument doc1 = documentList.get(index); 
+            String name2 = documentNames.get(index-1);
+            PDDocument doc2 = documentList.get(index-1);
+            documentNames.set(index-1, name1);
+            documentList.set(index-1, doc1);
+            documentNames.set(index, name2);
+            documentList.set(index, doc2); 
+        }
     }
     
     /**
      * Moves a file down in the list.
      * @param index 
      */
-    public void moveFileDown(int index){
+    public void moveFileDown(int index){        
         //TODO: Add Code
-        System.out.println("Moves down.");
-        System.out.println("Implement");
+        // account for actual document List
+        if(index < documentNames.size()){
+            String name1 = documentNames.get(index);
+            PDDocument doc1 = documentList.get(index); 
+            String name2 = documentNames.get(index+1);
+            PDDocument doc2 = documentList.get(index+1);
+            documentNames.set(index+1, name1);
+            documentList.set(index+1, doc1);
+            documentNames.set(index, name2);
+            documentList.set(index, doc2);
+        }
     }
     
     /**
