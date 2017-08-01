@@ -22,7 +22,7 @@ public class DocumentMergerTest {
         merger.setOutputPath("C:\\Users\\Mepnomon\\Desktop\\DocumentMerger\\DDressler_Diplomas.pdf");
         System.out.println("Total pages: " + merger.getTotalPages());
         merger.displayDocumentList();
-        merger.mergeFile();
+        merger.mergeFiles();
         System.out.println("Total pages after fileWrite: " + merger.getTotalPages());
     }   
 }

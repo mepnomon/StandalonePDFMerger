@@ -5,6 +5,8 @@
  */
 package com.eeu436.documentmerger;
 
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 
 /**
@@ -14,14 +16,22 @@ import javax.swing.JFileChooser;
 public class DMUserInterface extends javax.swing.JFrame {
 
     //Global variables
-    DocumentMerger merger;
+    private DocumentMerger merger;
+    private boolean mergeEnabled;
+    private boolean removeEnabled;
+    private DefaultListModel documentPaths;
+    
     /**
      * Creates new form DMUserInterface
      */
     public DMUserInterface() {
         //instantiate merger
         merger = new DocumentMerger();
+        mergeEnabled = false;
+        removeEnabled = false;
+        documentPaths = new DefaultListModel();
         initComponents();
+        setDefaults();
     }
 
     /**
@@ -152,7 +162,46 @@ public class DMUserInterface extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Set GUI defaults.
+     */
+    private void setDefaults(){
+        //disable remove button
+        removeButton.setEnabled(removeEnabled);
+        //disable merge button
+        mergeButton.setEnabled(mergeEnabled);
+        //fill file list
+        updateGUI();
+    }
+    
+    /**
+     * 
+     */
+    private void updateGUI(){
+        ArrayList<String> localDocumentList = merger.getList();
+        documentPaths.clear();
+        for(int i = 0; i < localDocumentList.size(); i++){
+            documentPaths.add(i, localDocumentList.get(i));
+        }
+        fileList.setModel(documentPaths);
+        
+        //if more than 1 document in list
+        if(documentPaths.size() > 1){
+            //enable merge button
+            mergeEnabled = true;
+            mergeButton.setEnabled(mergeEnabled);
+            //enable remove button
+            removeEnabled = true;
+            removeButton.setEnabled(mergeEnabled);
+        } else {
+            mergeEnabled = false;
+            mergeButton.setEnabled(mergeEnabled);
+            removeEnabled = false;
+            removeButton.setEnabled(removeEnabled);
+            
+        }
+    }
     /**
      * 
      * @param evt 
@@ -173,8 +222,9 @@ public class DMUserInterface extends javax.swing.JFrame {
         // File Chooser
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(jMenu3);
-        // get file path
-        String filePath = chooser.getSelectedFile().toString();
+        // get file path \ moo is a test value
+        String filePath = "moo";
+        filePath = chooser.getSelectedFile().toString();
         System.out.println("File:" + filePath);
         
         //check if file extension NOT pdf
@@ -186,6 +236,8 @@ public class DMUserInterface extends javax.swing.JFrame {
             merger.addFilesToList(filePath);
             System.out.println("Adding: " + filePath);
         }
+        // update list
+        updateGUI();
     }//GEN-LAST:event_addButtonActionPerformed
 
     /**
@@ -203,7 +255,21 @@ public class DMUserInterface extends javax.swing.JFrame {
      * @param evt 
      */
     private void mergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeButtonActionPerformed
-        // TODO add your handling code here:
+        
+        //dummy path
+        String outputPath = "C:\\Users\\Mepnomon\\Desktop\\output.pdf";
+        // set the path
+        merger.setOutputPath(outputPath);
+        // merge the files
+        merger.mergeFiles();
+        //clear documentList
+        documentPaths.clear();
+        //clear merger lists
+        merger.clearLists();
+        
+        //update gui
+        updateGUI();
+        
     }//GEN-LAST:event_mergeButtonActionPerformed
 
     /**
@@ -235,6 +301,7 @@ public class DMUserInterface extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new DMUserInterface().setVisible(true);
             }

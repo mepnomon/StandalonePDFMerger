@@ -1,5 +1,6 @@
 package com.eeu436.documentmerger;
 
+//imported packages
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
@@ -10,24 +11,22 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
  * A utility program to merge PDF documents.
- * @author D,B. Dressler
+ * @author D.B. Dressler
  */
 public class DocumentMerger {
     
     // Global variables
-    ArrayList<PDDocument> documentList;
-    ArrayList<String> documentNames;
-    PDDocument outputDocument;
-    String outputPath = null;
+    private ArrayList<PDDocument> documentList;
+    private ArrayList<String> documentNames;
+    private PDDocument outputDocument;
+    private String outputPath = null;
     
    
     /**
      * Zero parameter constructor
      */
     public DocumentMerger(){
-        
-        //instantiate output document
-        outputDocument = new PDDocument();
+       
         //stores documents
         documentList = new ArrayList<>();
         //store names of documents
@@ -46,27 +45,6 @@ public class DocumentMerger {
         this.outputPath = outputPath;
     }
     
-    /**
-     * Utility method to that merges PDF files
-     * @param filePath
-     */
-    public void addFilesToList(String filePath){
-        
-        //add to a new file
-        File file = new File(filePath);
-        try {
-            // 
-            PDDocument localDocument = PDDocument.load(file);
-            // 
-            documentList.add(localDocument);
-            documentNames.add(filePath);
-            // 
-            System.out.println("Added PDF " + filePath);
-        } catch (IOException ex) {
-            
-            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-    }
     /**
      * Counts the total pages to be merged.
      * @return the total number of pages to be merged
@@ -88,29 +66,76 @@ public class DocumentMerger {
     /**
      * Merges supplied documents and saves them to file location.
      */
-    public void mergeFile(){
-        
-        //PDFMergerUtility mergerUtil = new PDFMergerUtility();
-        // 
+    public void mergeFiles(){
+         //instantiate output document
+        outputDocument = new PDDocument();
+        // Add documents to output document
         for(PDDocument d : documentList){ 
-            // 
+            // Collate pages
             for(int i = 0; i < d.getNumberOfPages(); i++){
-               outputDocument.addPage(d.getPage(i));
+                // Append page to output document
+                outputDocument.addPage(d.getPage(i));
            }
         }
         try {
-            //write to file
+            // Check if file name is valid/unique
+            boolean fileNameVerified = false;
+            
+            // Loops until unique file name found
+            while(!fileNameVerified){
+                File f = new File(outputPath);
+                
+                // Check if the file exists
+                if(f.exists() && !f.isDirectory()) {
+                    
+                    // Grab original file name
+                    outputPath = outputPath.substring(0, outputPath.length()-4);
+                    // Append this
+                    outputPath += "_new.pdf";
+                    // Write to log window
+                    System.out.println(outputPath);
+
+                } else { // unique file name found
+                    // End loop
+                    fileNameVerified = true;
+                }
+            }
+            // Write to file
             outputDocument.save(outputPath);
-            //close writer
+            
+            // Close writer
             outputDocument.close();
             
-            // clear lists
+            // Clear lists
             documentList.clear();
             documentNames.clear();
+            // Signal success
             System.out.println("Successfully written to: " + outputPath);
         } catch (IOException ex) {
             Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * Add a PDF file to merge
+     * @param filePath the file's path
+     */
+    public void addFilesToList(String filePath){
+        
+        //add to a new file
+        File file = new File(filePath);
+        try {
+            // 
+            PDDocument localDocument = PDDocument.load(file);
+            // 
+            documentList.add(localDocument);
+            documentNames.add(filePath);
+            // 
+            System.out.println("Added PDF " + filePath);
+        } catch (IOException ex) {
+            
+            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     
     /**
@@ -122,6 +147,21 @@ public class DocumentMerger {
         documentList.remove(index);
         documentNames.remove(index);
         System.out.println("Deleted: " + index);
+    }
+    
+    /**
+     * Get list of document names, used for GUI.
+     * @return a list of documents to merge
+     */
+    public ArrayList<String> getList(){
+       
+        if(documentNames.isEmpty()){
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add("Your documents will appear in this list...");
+            return temp;
+        }
+        
+        return documentNames;
     }
     
     /**
@@ -157,5 +197,14 @@ public class DocumentMerger {
         for(String s : documentNames){
             System.out.println(s);
         }
+    }
+    
+    /**
+     * Clears the files from memory.
+     */
+    public void clearLists(){
+        
+        documentNames.clear();
+        documentList.clear();
     }
 }
