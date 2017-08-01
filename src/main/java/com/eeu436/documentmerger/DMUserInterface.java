@@ -5,6 +5,7 @@
  */
 package com.eeu436.documentmerger;
 
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -63,7 +64,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("PDFMerger (c) 2017 D.B.Dressler");
+        setTitle("PDFMerger 0.8 (beta) (c) 2017 D.B.Dressler");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setName("MainFrame"); // NOI18N
         setResizable(false);
@@ -169,6 +170,8 @@ public class DMUserInterface extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
+        getAccessibleContext().setAccessibleName("PDFMerger 0.8 (c) 2017 D.B.Dressler");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
@@ -249,27 +252,39 @@ public class DMUserInterface extends javax.swing.JFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         
+        //nt returnVal = fil
         // Debug
         System.out.println("add button pressed");
         // File Chooser
         JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(jMenu3);
-        // get file path \ moo is a test value
-        String filePath = "moo";
-        filePath = chooser.getSelectedFile().toString();
-        System.out.println("File:" + filePath);
-        
-        // Check if selected file's extension NOT pdf
-        if(!filePath.substring(filePath.length()-3, 
+        int returnVal = chooser.showOpenDialog(jMenu3);
+         if (returnVal == JFileChooser.APPROVE_OPTION){
+            String filePath = "moo";
+            File file = chooser.getSelectedFile();
+            filePath = file.getAbsolutePath();
+            if(!filePath.substring(filePath.length()-3, 
                 filePath.length()).equals("pdf")){
             
             System.out.println("Error, only load .pdf files.");
             // throw an error here
-        } else {
-            // pass file path to merger
-            merger.addFilesToList(filePath);
-            System.out.println("Adding: " + filePath);
-        }
+            } else {
+                // pass file path to merger
+                merger.addFilesToList(filePath);
+                System.out.println("Adding: " + filePath);
+                System.out.println("File:" + filePath);
+                
+            }
+         }
+
+
+
+        //chooser.showOpenDialog(jMenu3);
+        // get file path \ moo is a test value
+        //String filePath = "moo";
+        //filePath = chooser.getSelectedFile().toString();
+        
+        // Check if selected file's extension NOT pdf
+        
         // update list
         updateGUI();
     }//GEN-LAST:event_addButtonActionPerformed

@@ -33,13 +33,16 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="PDFMerger (c) 2017 D.B.Dressler"/>
+    <Property name="title" type="java.lang.String" value="PDFMerger 0.8 (beta) (c) 2017 D.B.Dressler"/>
     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
       <Color id="Default Cursor"/>
     </Property>
     <Property name="name" type="java.lang.String" value="MainFrame" noResource="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
+  <AccessibilityProperties>
+    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="PDFMerger 0.8 (c) 2017 D.B.Dressler"/>
+  </AccessibilityProperties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
