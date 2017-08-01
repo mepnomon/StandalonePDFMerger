@@ -17,10 +17,11 @@ import javax.swing.JFileChooser;
 public class DMUserInterface extends javax.swing.JFrame {
 
     //Global variables
-    private DocumentMerger merger;
+    private static DocumentMerger merger;
     private boolean mergeEnabled;
     private boolean removeEnabled;
     private DefaultListModel documentPaths;
+    private File file;
     
     /**
      * Creates new form DMUserInterface
@@ -251,7 +252,8 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
-        
+        boolean isValid = false;
+        String filePath = "moo";
         //nt returnVal = fil
         // Debug
         System.out.println("add button pressed");
@@ -259,22 +261,30 @@ public class DMUserInterface extends javax.swing.JFrame {
         JFileChooser chooser = new JFileChooser();
         int returnVal = chooser.showOpenDialog(jMenu3);
          if (returnVal == JFileChooser.APPROVE_OPTION){
-            String filePath = "moo";
-            File file = chooser.getSelectedFile();
+            
+            file = chooser.getSelectedFile();
             filePath = file.getAbsolutePath();
+            statusPane.setText("Adding: " + filePath);
             if(!filePath.substring(filePath.length()-3, 
                 filePath.length()).equals("pdf")){
-            
-            System.out.println("Error, only load .pdf files.");
+                isValid = false;
+                System.out.println("Error, only load .pdf files.");
+                statusPane.setText("ERROR, cannot load file.");
             // throw an error here
             } else {
+                isValid = true;
                 // pass file path to merger
-                merger.addFilesToList(filePath);
                 System.out.println("Adding: " + filePath);
-                System.out.println("File:" + filePath);
                 
             }
          }
+         
+         statusPane.setText("you are here");
+         
+         if(isValid){
+                merger.addFilesToList(filePath);
+                statusPane.setText("Passing to merger: " + filePath  );
+            }
 
 
 
