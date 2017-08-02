@@ -25,14 +25,13 @@ public class DocumentMerger {
     private ArrayList<String> documentNames;
     private PDDocument outputDocument;
     private String outputPath = null;
-    String placeHolderText = "Your documents will appear in this list...";
+    final String PLACEHOLDER_TEXT = "Your documents will appear in this list...";
     
    
     /**
      * Constructs a new DocumentMerger.
      */
     public DocumentMerger(){
-       
         // Stores actual documents
         documentList = new ArrayList<>();
         // Stores names of documents
@@ -95,13 +94,10 @@ public class DocumentMerger {
                 // Check if the file exists
                 if(f.exists() && !f.isDirectory()) {
                     
-                    // Grab original file name
+                    // File name without file extension
                     outputPath = outputPath.substring(0, outputPath.length()-4);
                     // Append this
                     outputPath += "_new.pdf";
-                    // Write to log window
-                    System.out.println(outputPath);
-
                 } else { // unique file name found
                     // End loop
                     fileNameVerified = true;
@@ -110,7 +106,7 @@ public class DocumentMerger {
             // Write to file
             outputDocument.save(outputPath);
             
-            // Close writer
+            // Close document
             outputDocument.close();
             
             // Close all documents in list, PDFBox will flag error if not.
@@ -129,7 +125,7 @@ public class DocumentMerger {
     }
     
     /**
-     * Add a PDF file to merge
+     * Adds a PDF file to the list containing PDFs to merge.
      * @param filePath the file's path
      */
     public void addFilesToList(String filePath){
@@ -149,9 +145,9 @@ public class DocumentMerger {
     }
     
     /**
-     * Removes a file from the edocumentList.
+     * Removes a file from the list of documents.
      * @param index 
-     * @return file name at index
+     * @return deleted file's name.
      */
     public String removeFileFromList(int index){
         
@@ -170,7 +166,7 @@ public class DocumentMerger {
         // If no documents in list, return placeholder
         if(documentNames.isEmpty()){
             ArrayList<String> temp = new ArrayList<>();
-            temp.add(placeHolderText);
+            temp.add(PLACEHOLDER_TEXT);
             return temp;
         }
         // Return the list of filepaths
@@ -219,8 +215,6 @@ public class DocumentMerger {
      * Displays the list of documents.
      */
     public void displayDocumentList(){
-        
-        // test whether empty
         for(String s : documentNames){
             System.out.println(s);
         }
@@ -247,19 +241,18 @@ public class DocumentMerger {
     
     /**
      * Number of documents present.
-     * @return a number.
+     * @return the number of documents.
      */
     public int getDocumentCount(){
         return documentNames.size();
     }
-    
-    
+      
     //ISO 19005 VALIDATION tools... not necessary
     /**
      * Uses PDFBox PreFlight to check if PDF is compliant with
      * ISO-19005
      * @param filePath
-     * @return 
+     * @return if pdf is ISO 19005 compliant.
      */
     public boolean isValidPDF(String filePath){
        Optional<ValidationResult> validationResult = 
@@ -279,7 +272,7 @@ public class DocumentMerger {
     /**
      * Gets a validation result
      * @param filePath
-     * @return 
+     * @return the validation result.
      */
     private Optional<ValidationResult> getValidationResult(String filePath){
         if(Objects.isNull(filePath)){

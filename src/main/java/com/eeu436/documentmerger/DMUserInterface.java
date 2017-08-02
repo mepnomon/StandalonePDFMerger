@@ -21,7 +21,6 @@ public class DMUserInterface extends javax.swing.JFrame {
     private boolean mergeEnabled;
     private boolean removeEnabled;
     private DefaultListModel documentPaths;
-    private File file;
     
     /**
      * Creates new form DMUserInterface
@@ -253,7 +252,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         
         // Check if dummy file name present
         boolean isPlaceHolderText = true;
-        if(!localDocumentList.get(0).equals(merger.placeHolderText)){
+        if(!localDocumentList.get(0).equals(merger.PLACEHOLDER_TEXT)){
             isPlaceHolderText = false;
         }
         
@@ -302,31 +301,28 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
-        String filePath = "";
+        String filePath = null;
         
         // File Chooser
         JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(true);
+        File[] filesToOpen; //= new File[1];
         int returnVal = chooser.showOpenDialog(jMenu3);
-         if (returnVal == JFileChooser.APPROVE_OPTION){
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            filesToOpen = chooser.getSelectedFiles();
             
-            
-            file = chooser.getSelectedFile();
-            filePath = file.getAbsolutePath();
-            //check if compliant with ISO 19005 \\ nonsense
-//            if(!merger.isValidPDF(filePath)){
-//                statusPane.setText(filePath + " is not a valid .pdf file.");
-//            } else {
-//                merger.addFilesToList(filePath);
-//                statusPane.setText("File added: " + filePath);
-//            }
-            //statusPane.setText("Adding: " + filePath);
-            if(!filePath.toLowerCase().substring(filePath.length()-3, 
-                filePath.length()).equals("pdf") || file.length() == 0){
-                statusPane.setText("File must be PDF.");
-            // throw an error here
-            } else {
-                merger.addFilesToList(filePath);
-                statusPane.setText("File added: " + filePath);
+            for(int i = 0; i < filesToOpen.length; i++){
+                filePath = filesToOpen[i].getAbsolutePath();
+                File locFile = filesToOpen[i];
+                //statusPane.setText("Adding: " + filePath);
+                if(filePath.toLowerCase().substring(filePath.length()-3, 
+                        filePath.length()).equals("pdf") && locFile.length() != 0){
+                    merger.addFilesToList(filePath);
+                    statusPane.setText("File added: " + filePath);
+                } else {
+                    statusPane.setText("File must be PDF.");
+                    // throw an error here
+                }
             }
          }
         // update list
