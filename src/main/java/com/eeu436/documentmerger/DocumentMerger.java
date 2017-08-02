@@ -4,9 +4,14 @@ package com.eeu436.documentmerger;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument; 
+import org.apache.pdfbox.preflight.PreflightDocument;
+import org.apache.pdfbox.preflight.ValidationResult;
+import org.apache.pdfbox.preflight.parser.PreflightParser;
 
 
 /**
@@ -24,15 +29,14 @@ public class DocumentMerger {
     
    
     /**
-     * Zero parameter constructor
+     * Constructs a new DocumentMerger.
      */
     public DocumentMerger(){
        
-        //stores documents
+        // Stores actual documents
         documentList = new ArrayList<>();
-        //store names of documents
+        // Stores names of documents
         documentNames = new ArrayList<>();
-        
     }
     
     
@@ -52,7 +56,7 @@ public class DocumentMerger {
     public int getTotalPages(){
         int retVal = 0;
         
-        // if document lst is empty
+        // If document lst is empty
         if(documentList.isEmpty()){
             return 0;
         }
@@ -129,16 +133,16 @@ public class DocumentMerger {
      * @param filePath the file's path
      */
     public void addFilesToList(String filePath){
-        //add to a new file
+        
+        // Assign retrieved file
         File file = new File(filePath);
         try {
-            // 
+            // Create PDDocument from file
             PDDocument localDocument = PDDocument.load(file);
-            // 
+            // Add to lists
             documentList.add(localDocument);
             documentNames.add(filePath);
         } catch (IOException ex) {
-            
             Logger.getLogger(DocumentMerger.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
@@ -147,6 +151,7 @@ public class DocumentMerger {
     /**
      * Removes a file from the edocumentList.
      * @param index 
+     * @return file name at index
      */
     public String removeFileFromList(int index){
         
@@ -162,12 +167,13 @@ public class DocumentMerger {
      */
     public ArrayList<String> getList(){
        
+        // If no documents in list, return placeholder
         if(documentNames.isEmpty()){
             ArrayList<String> temp = new ArrayList<>();
             temp.add(placeHolderText);
             return temp;
         }
-        
+        // Return the list of filepaths
         return documentNames;
     }
     
@@ -176,7 +182,8 @@ public class DocumentMerger {
      * @param index 
      */
     public void moveFileUp(int index){
-        //TODO: Add code
+        
+        // Ensure that that index is not 0
         if(index > 0){
             String name1 = documentNames.get(index);
             PDDocument doc1 = documentList.get(index); 
@@ -194,8 +201,8 @@ public class DocumentMerger {
      * @param index 
      */
     public void moveFileDown(int index){        
-        //TODO: Add Code
-        // account for actual document List
+
+        // Ensure that index is not out of bounds
         if(index < documentNames.size()){
             String name1 = documentNames.get(index);
             PDDocument doc1 = documentList.get(index); 
@@ -225,7 +232,6 @@ public class DocumentMerger {
      * @return A document name.
      */
     public String getElementFromDocumentList(int index){
-        
         // return document name at index
         return documentNames.get(index);
     }
@@ -245,5 +251,54 @@ public class DocumentMerger {
      */
     public int getDocumentCount(){
         return documentNames.size();
+    }
+    
+    
+    //ISO 19005 VALIDATION tools... not necessary
+    /**
+     * Uses PDFBox PreFlight to check if PDF is compliant with
+     * ISO-19005
+     * @param filePath
+     * @return 
+     */
+    public boolean isValidPDF(String filePath){
+       Optional<ValidationResult> validationResult = 
+               getValidationResult(filePath);
+       
+       if(!validationResult.isPresent()){
+           return false;
+       }
+       
+       ValidationResult result = validationResult.get();
+       if(result.isValid()){
+           return true;
+       }
+       return false;
+    }
+    
+    /**
+     * Gets a validation result
+     * @param filePath
+     * @return 
+     */
+    private Optional<ValidationResult> getValidationResult(String filePath){
+        if(Objects.isNull(filePath)){
+            throw new NullPointerException("filename shouldn't be null");
+        }
+        
+        try{
+            File preflightFile = new File(filePath);
+            PreflightParser parser = new PreflightParser(preflightFile);
+            parser.setLenient(true);
+            parser.parse();
+            try(PreflightDocument document = parser.getPreflightDocument()){
+                document.validate();
+                ValidationResult result = document.getResult();
+                return Optional.of(result);
+            }
+        } catch(IOException ex){
+            System.out.println("Error no file");
+            return Optional.empty();
+        }
     }
 }

@@ -71,7 +71,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("PDFMerger 0.8 (beta) (c) 2017 D.B.Dressler");
+        setTitle("PDFMerger 0.9 (beta) (c) 2017 D.B.Dressler");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setName("MainFrame"); // NOI18N
         setResizable(false);
@@ -277,13 +277,15 @@ public class DMUserInterface extends javax.swing.JFrame {
         // Enable/Disable buttons
         mergeButton.setEnabled(mergeEnabled);
         removeButton.setEnabled(removeEnabled);
+        // Display # of documents
         docCountLabel.setText(Integer.toString(merger.getDocumentCount()));
+        // Display total # of pages
         pageCountLabel.setText(Integer.toString(merger.getTotalPages()));
         
     }
     
     /**
-     * 
+     * Moves a selected document down in the list.
      * @param evt 
      */
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
@@ -307,8 +309,16 @@ public class DMUserInterface extends javax.swing.JFrame {
         int returnVal = chooser.showOpenDialog(jMenu3);
          if (returnVal == JFileChooser.APPROVE_OPTION){
             
+            
             file = chooser.getSelectedFile();
             filePath = file.getAbsolutePath();
+            //check if compliant with ISO 19005 \\ nonsense
+//            if(!merger.isValidPDF(filePath)){
+//                statusPane.setText(filePath + " is not a valid .pdf file.");
+//            } else {
+//                merger.addFilesToList(filePath);
+//                statusPane.setText("File added: " + filePath);
+//            }
             //statusPane.setText("Adding: " + filePath);
             if(!filePath.toLowerCase().substring(filePath.length()-3, 
                 filePath.length()).equals("pdf") || file.length() == 0){
@@ -337,7 +347,7 @@ public class DMUserInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_removeButtonActionPerformed
 
     /**
-     * Performs functionality when merge button is pressed.
+     * Merges PDFs into a single document, when pressed.
      * @param evt 
      */
     private void mergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeButtonActionPerformed
