@@ -209,16 +209,17 @@ public class DMUserInterface extends javax.swing.JFrame {
         fileList.setModel(documentPaths);
         
         // Check if dummy file name present
-        boolean dummyFileName = true;
+        boolean isPlaceHolderText = true;
         if(!localDocumentList.get(0).equals(merger.placeHolderText)){
-            dummyFileName = false;
+            isPlaceHolderText = false;
         }
         
         // Enable/Disable buttons
         //if 1 documents in list and it's not the dummy
-        if(documentPaths.size() == 1 && !dummyFileName){
+        if(documentPaths.size() == 1 && !isPlaceHolderText){
             // Enable remove button
             removeEnabled = true;
+            mergeEnabled = false;
         } else if(documentPaths.size() > 1){ //more than 1 file present
             // Enable remove and merge
             removeEnabled = true;
