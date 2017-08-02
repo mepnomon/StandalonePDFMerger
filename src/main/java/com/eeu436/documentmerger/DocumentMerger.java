@@ -20,7 +20,7 @@ public class DocumentMerger {
     private ArrayList<String> documentNames;
     private PDDocument outputDocument;
     private String outputPath = null;
-    String dummyString = "Your documents will appear in this list...";
+    String placeHolderText = "Your documents will appear in this list...";
     
    
     /**
@@ -37,12 +37,11 @@ public class DocumentMerger {
     
     
     /**
-     * Sets the output path
+     * Sets the output path for the merged document.
      * @param outputPath takes a string
      */
     public void setOutputPath(String outputPath){
         
-        System.out.println("Output to: " + outputPath);
         this.outputPath = outputPath;
     }
     
@@ -53,14 +52,17 @@ public class DocumentMerger {
     public int getTotalPages(){
         int retVal = 0;
         
+        // if document lst is empty
         if(documentList.isEmpty()){
             return 0;
         }
         
+        // Aggregate number of pages
         for(PDDocument d : documentList){
             retVal += d.getNumberOfPages();
         }
-        //return number of pages
+        
+        // Return number of pages
         return retVal;
     }
     
@@ -72,7 +74,7 @@ public class DocumentMerger {
         outputDocument = new PDDocument();
         // Add documents to output document
         for(PDDocument d : documentList){ 
-            // Collate pages
+            // Aggregate pages
             for(int i = 0; i < d.getNumberOfPages(); i++){
                 // Append page to output document
                 outputDocument.addPage(d.getPage(i));
@@ -107,7 +109,7 @@ public class DocumentMerger {
             // Close writer
             outputDocument.close();
             
-            // Close all documents in list
+            // Close all documents in list, PDFBox will flag error if not.
             for(PDDocument d : documentList){
                 d.close();
             }
@@ -115,10 +117,10 @@ public class DocumentMerger {
             // Clear lists
             documentList.clear();
             documentNames.clear();
-            // Signal success
-            System.out.println("Successfully written to: " + outputPath);
+       
         } catch (IOException ex) {
-            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DocumentMerger.class.getName()).
+                    log(Level.SEVERE, null, ex);
         }
     }
     
@@ -137,7 +139,8 @@ public class DocumentMerger {
             documentNames.add(filePath);
         } catch (IOException ex) {
             
-            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DocumentMerger.class.getName()).
+                    log(Level.SEVERE, null, ex);
         }
     }
     
@@ -145,11 +148,12 @@ public class DocumentMerger {
      * Removes a file from the edocumentList.
      * @param index 
      */
-    public void removeFileFromList(int index){
+    public String removeFileFromList(int index){
         
+        String retVal = documentNames.get(index);
         documentList.remove(index);
         documentNames.remove(index);
-        System.out.println("Deleted: " + index);
+        return retVal;
     }
     
     /**
@@ -160,7 +164,7 @@ public class DocumentMerger {
        
         if(documentNames.isEmpty()){
             ArrayList<String> temp = new ArrayList<>();
-            temp.add(dummyString);
+            temp.add(placeHolderText);
             return temp;
         }
         
@@ -209,14 +213,21 @@ public class DocumentMerger {
      */
     public void displayDocumentList(){
         
-        if(documentNames.isEmpty()){
-            System.out.println("");
-        }
-        System.out.println("Printing file list:");
         // test whether empty
         for(String s : documentNames){
             System.out.println(s);
         }
+    }
+    
+    /**
+     * Get a document name at a specified index.
+     * @param index the index
+     * @return A document name.
+     */
+    public String getElementFromDocumentList(int index){
+        
+        // return document name at index
+        return documentNames.get(index);
     }
     
     /**

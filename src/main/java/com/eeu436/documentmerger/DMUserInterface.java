@@ -180,11 +180,12 @@ public class DMUserInterface extends javax.swing.JFrame {
      * Set GUI defaults.
      */
     private void setDefaults(){
-        //disable remove button
+        
+        // Disable remove button
         removeButton.setEnabled(removeEnabled);
-        //disable merge button
+        // Disable merge button
         mergeButton.setEnabled(mergeEnabled);
-        //fill file list
+        statusPane.setText("Click add and select a file.\nReady...");
         updateGUI();
     }
     
@@ -209,7 +210,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         
         // Check if dummy file name present
         boolean dummyFileName = true;
-        if(!localDocumentList.get(0).equals(merger.dummyString)){
+        if(!localDocumentList.get(0).equals(merger.placeHolderText)){
             dummyFileName = false;
         }
         
@@ -261,8 +262,8 @@ public class DMUserInterface extends javax.swing.JFrame {
             
             file = chooser.getSelectedFile();
             filePath = file.getAbsolutePath();
-            statusPane.setText("Adding: " + filePath);
-            if(!filePath.substring(filePath.length()-3, 
+            //statusPane.setText("Adding: " + filePath);
+            if(!filePath.toLowerCase().substring(filePath.length()-3, 
                 filePath.length()).equals("pdf")){
                 statusPane.setText("File must be PDF.");
             // throw an error here
@@ -281,7 +282,10 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         
-        merger.removeFileFromList(fileList.getSelectedIndex());
+        // Remove from List
+        String filePath = merger.removeFileFromList(fileList.getSelectedIndex());
+        // Inform user
+        statusPane.setText("File removed: " + filePath);
         updateGUI();
     }//GEN-LAST:event_removeButtonActionPerformed
 
@@ -291,34 +295,38 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void mergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeButtonActionPerformed
         
-        //request output location:
+        // Open file chooser dialog
         JFileChooser chooser = new JFileChooser();
         chooser.showSaveDialog(jMenu3);
-        
+        // Get file path
         String outputPath = chooser.getSelectedFile().toString();
-        if(!outputPath.substring(outputPath.length()-3, outputPath.length()).equals("pdf")){
+        // Check if user specified that file extension is .pdf
+        if(!outputPath.toLowerCase().substring(outputPath.length()-3, outputPath.length()).equals("pdf")){
+            // Append .pdf to output file
             outputPath += ".pdf";
         }
-        //dummy path
-        //String outputPath = "C:\\Users\\Mepnomon\\Desktop\\output.pdf";
-        // set the path
+        
+        // Set the output path
         merger.setOutputPath(outputPath);
-        // merge the files
+        // Merge the files
         merger.mergeFiles();
-        //clear documentList
+        // Clear documentList
         documentPaths.clear();
-        //clear merger lists
+        // Clear merger lists
         merger.clearLists();
-        //update gui
+        // Notify user
+        statusPane.setText("File written to: " + outputPath);
+        // Update gui
         updateGUI();
     }//GEN-LAST:event_mergeButtonActionPerformed
 
     /**
-     * 
+     * Moves a selected element up in the List displaying selected files.
      * @param evt 
      */
     private void moveUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveUpButtonActionPerformed
         
+        // Check if within boundaries
         if(fileList.getSelectedIndex() > 0){
             merger.moveFileUp(fileList.getSelectedIndex());
             updateGUI();
