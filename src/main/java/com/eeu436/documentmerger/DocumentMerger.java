@@ -238,4 +238,12 @@ public class DocumentMerger {
         documentNames.clear();
         documentList.clear();
     }
+    
+    /**
+     * Number of documents present.
+     * @return a number.
+     */
+    public int getDocumentCount(){
+        return documentNames.size();
+    }
 }
