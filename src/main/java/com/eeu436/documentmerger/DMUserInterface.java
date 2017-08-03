@@ -167,6 +167,11 @@ public class DMUserInterface extends javax.swing.JFrame {
         fileMenu.add(fileMenu_btnAdd);
 
         fileMenu_mergeBtn.setText("Merge Files");
+        fileMenu_mergeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_mergeBtnActionPerformed(evt);
+            }
+        });
         fileMenu.add(fileMenu_mergeBtn);
         fileMenu.add(jSeparator1);
 
@@ -367,13 +372,29 @@ public class DMUserInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_moveUpButtonActionPerformed
 
+    /**
+     * Add a document via the file menu.
+     * @param evt 
+     */
     private void fileMenu_btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_btnAddActionPerformed
         addFunctionality();
     }//GEN-LAST:event_fileMenu_btnAddActionPerformed
 
+    /**
+     * Exit button in Menu, exits program.
+     * @param evt 
+     */
     private void fileMenu_exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_exitBtnActionPerformed
         System.exit(0);
     }//GEN-LAST:event_fileMenu_exitBtnActionPerformed
+
+    /**
+     * Merge button, via the file menu.
+     * @param evt 
+     */
+    private void fileMenu_mergeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_mergeBtnActionPerformed
+        mergeFunctionality();
+    }//GEN-LAST:event_fileMenu_mergeBtnActionPerformed
 
     /**
      * @param args the command line arguments
