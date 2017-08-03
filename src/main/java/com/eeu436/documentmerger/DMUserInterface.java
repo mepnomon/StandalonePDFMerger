@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+    Copyright 2017, D.B. Dressler
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
  */
 package com.eeu436.documentmerger;
 
@@ -439,9 +449,13 @@ public class DMUserInterface extends javax.swing.JFrame {
         String filePath = null;
         // File Chooser
         JFileChooser chooser = new JFileChooser();
+        // Multi file selector
         chooser.setMultiSelectionEnabled(true);
-        File[] filesToOpen; //= new File[1];
+        // Stores files to open
+        File[] filesToOpen;
         int returnVal = chooser.showOpenDialog(null);
+        
+        // check if valid option in file chooser
         if (returnVal == JFileChooser.APPROVE_OPTION){
             filesToOpen = chooser.getSelectedFiles();
             
@@ -471,26 +485,23 @@ public class DMUserInterface extends javax.swing.JFrame {
         // Open file chooser dialog
         JFileChooser chooser = new JFileChooser();
         chooser.showSaveDialog(null);
-        // Get file path
+        // Get output path
         String outputPath = chooser.getSelectedFile().toString();
+        
         // Check if user specified that file extension is .pdf
-        if(!outputPath.toLowerCase().substring(outputPath.length()-3, outputPath.length()).equals("pdf")){
+        if(!outputPath.toLowerCase().substring(outputPath.length()-3, 
+                outputPath.length()).equals("pdf")){
+            
             // Append .pdf to output file
             outputPath += ".pdf";
         }
         
-        // Set the output path
-        merger.setOutputPath(outputPath);
-        // Merge the files
-        merger.mergeFiles();
-        // Clear documentList
-        documentPaths.clear();
-        // Clear merger lists
-        merger.clearLists();
-        // Notify user
-        statusPane.setText("File written to: " + outputPath);
-        // Update gui
-        updateGUI();
+        merger.setOutputPath(outputPath);// Set the output path
+        merger.mergeFiles(); // Merge the files
+        documentPaths.clear(); // Clear documentList
+        merger.clearLists(); // Clear merger lists
+        statusPane.setText("File written to: " + outputPath); // Notify user
+        updateGUI(); // Update gui
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
