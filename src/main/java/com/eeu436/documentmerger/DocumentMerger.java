@@ -36,8 +36,8 @@ import org.apache.pdfbox.preflight.parser.PreflightParser;
 public class DocumentMerger {
     
     // Global variables
-    private ArrayList<PDDocument> documentList;
-    private ArrayList<String> documentNames;
+    private final ArrayList<PDDocument> DOCUMENT_LIST;
+    private final ArrayList<String> DOCUMENT_NAMES;
     private PDDocument outputDocument;
     private String outputPath = null;
     final String PLACEHOLDER_TEXT = "Your documents will appear in this list...";
@@ -48,9 +48,9 @@ public class DocumentMerger {
      */
     public DocumentMerger(){
         // Stores actual documents
-        documentList = new ArrayList<>();
+        DOCUMENT_LIST = new ArrayList<>();
         // Stores names of documents
-        documentNames = new ArrayList<>();
+        DOCUMENT_NAMES = new ArrayList<>();
     }
     
     
@@ -71,12 +71,12 @@ public class DocumentMerger {
         int retVal = 0;
         
         // If document lst is empty
-        if(documentList.isEmpty()){
+        if(DOCUMENT_LIST.isEmpty()){
             return 0;
         }
         
         // Aggregate number of pages
-        for(PDDocument d : documentList){
+        for(PDDocument d : DOCUMENT_LIST){
             retVal += d.getNumberOfPages();
         }
         
@@ -91,7 +91,7 @@ public class DocumentMerger {
          //instantiate output document
         outputDocument = new PDDocument();
         // Add documents to output document
-        for(PDDocument d : documentList){ 
+        for(PDDocument d : DOCUMENT_LIST){ 
             // Aggregate pages
             for(int i = 0; i < d.getNumberOfPages(); i++){
                 // Append page to output document
@@ -124,13 +124,13 @@ public class DocumentMerger {
             // Close document
             outputDocument.close();
             // Close all documents in list, PDFBox will flag error if not.
-            for(PDDocument d : documentList){
+            for(PDDocument d : DOCUMENT_LIST){
                 d.close();
             }
             
             // Clear lists
-            documentList.clear();
-            documentNames.clear();
+            DOCUMENT_LIST.clear();
+            DOCUMENT_NAMES.clear();
        
         } catch (IOException ex) {
             Logger.getLogger(DocumentMerger.class.getName()).
@@ -150,8 +150,8 @@ public class DocumentMerger {
             // Create PDDocument from file
             PDDocument localDocument = PDDocument.load(file);
             // Add to lists
-            documentList.add(localDocument);
-            documentNames.add(filePath);
+            DOCUMENT_LIST.add(localDocument);
+            DOCUMENT_NAMES.add(filePath);
         } catch (IOException ex) {
             Logger.getLogger(DocumentMerger.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -165,15 +165,15 @@ public class DocumentMerger {
      */
     public String removeFileFromList(int index){
         
-        String retVal = documentNames.get(index);
-        PDDocument temp = documentList.get(index);
+        String retVal = DOCUMENT_NAMES.get(index);
+        PDDocument temp = DOCUMENT_LIST.get(index);
         try {
             temp.close();
         } catch (IOException ex) {
             Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
         }
-        documentList.remove(index);
-        documentNames.remove(index);
+        DOCUMENT_LIST.remove(index);
+        DOCUMENT_NAMES.remove(index);
         return retVal;
     }
     
@@ -184,13 +184,13 @@ public class DocumentMerger {
     public ArrayList<String> getList(){
        
         // If no documents in list, return placeholder
-        if(documentNames.isEmpty()){
+        if(DOCUMENT_NAMES.isEmpty()){
             ArrayList<String> temp = new ArrayList<>();
             temp.add(PLACEHOLDER_TEXT);
             return temp;
         }
         // Return the list of filepaths
-        return documentNames;
+        return DOCUMENT_NAMES;
     }
     
     /**
@@ -201,14 +201,14 @@ public class DocumentMerger {
         
         // Ensure that that index is not 0
         if(index > 0){
-            String name1 = documentNames.get(index);
-            PDDocument doc1 = documentList.get(index); 
-            String name2 = documentNames.get(index-1);
-            PDDocument doc2 = documentList.get(index-1);
-            documentNames.set(index-1, name1);
-            documentList.set(index-1, doc1);
-            documentNames.set(index, name2);
-            documentList.set(index, doc2); 
+            String name1 = DOCUMENT_NAMES.get(index);
+            PDDocument doc1 = DOCUMENT_LIST.get(index); 
+            String name2 = DOCUMENT_NAMES.get(index-1);
+            PDDocument doc2 = DOCUMENT_LIST.get(index-1);
+            DOCUMENT_NAMES.set(index-1, name1);
+            DOCUMENT_LIST.set(index-1, doc1);
+            DOCUMENT_NAMES.set(index, name2);
+            DOCUMENT_LIST.set(index, doc2); 
         }
     }
     
@@ -219,15 +219,15 @@ public class DocumentMerger {
     public void moveFileDown(int index){        
 
         // Ensure that index is not out of bounds
-        if(index < documentNames.size()){
-            String name1 = documentNames.get(index);
-            PDDocument doc1 = documentList.get(index); 
-            String name2 = documentNames.get(index+1);
-            PDDocument doc2 = documentList.get(index+1);
-            documentNames.set(index+1, name1);
-            documentList.set(index+1, doc1);
-            documentNames.set(index, name2);
-            documentList.set(index, doc2);
+        if(index < DOCUMENT_NAMES.size()){
+            String name1 = DOCUMENT_NAMES.get(index);
+            PDDocument doc1 = DOCUMENT_LIST.get(index); 
+            String name2 = DOCUMENT_NAMES.get(index+1);
+            PDDocument doc2 = DOCUMENT_LIST.get(index+1);
+            DOCUMENT_NAMES.set(index+1, name1);
+            DOCUMENT_LIST.set(index+1, doc1);
+            DOCUMENT_NAMES.set(index, name2);
+            DOCUMENT_LIST.set(index, doc2);
         }
     }
     
@@ -235,7 +235,7 @@ public class DocumentMerger {
      * Displays the list of documents.
      */
     public void displayDocumentList(){
-        for(String s : documentNames){
+        for(String s : DOCUMENT_NAMES){
             System.out.println(s);
         }
     }
@@ -247,7 +247,7 @@ public class DocumentMerger {
      */
     public String getElementFromDocumentList(int index){
         // return document name at index
-        return documentNames.get(index);
+        return DOCUMENT_NAMES.get(index);
     }
     
     /**
@@ -255,8 +255,8 @@ public class DocumentMerger {
      */
     public void clearLists(){
         
-        documentNames.clear();
-        documentList.clear();
+        DOCUMENT_NAMES.clear();
+        DOCUMENT_LIST.clear();
     }
     
     /**
@@ -264,7 +264,7 @@ public class DocumentMerger {
      * @return the number of documents.
      */
     public int getDocumentCount(){
-        return documentNames.size();
+        return DOCUMENT_NAMES.size();
     }
       
     //ISO 19005 VALIDATION tools... not necessary

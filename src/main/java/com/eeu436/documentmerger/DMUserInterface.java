@@ -15,10 +15,15 @@
  */
 package com.eeu436.documentmerger;
 
+// imports
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  * User Interface for Document Merger
@@ -30,8 +35,9 @@ public class DMUserInterface extends javax.swing.JFrame {
     private static DocumentMerger merger;
     private boolean mergeEnabled;
     private boolean removeEnabled;
-    private DefaultListModel documentPaths;
-    
+    private final DefaultListModel DOCUMENT_PATHS;
+    private final String LICENSE_LOC = "src\\main\\resources\\License\\LICENSE.txt";
+    private ArrayList<String> notifications;
     /**
      * Creates new form DMUserInterface
      */
@@ -43,7 +49,9 @@ public class DMUserInterface extends javax.swing.JFrame {
         // Control variable for remove button
         removeEnabled = false;
         // List of document paths
-        documentPaths = new DefaultListModel();
+        DOCUMENT_PATHS = new DefaultListModel();
+        
+        notifications = new ArrayList<>();
         initComponents();
         // Set gui defaults
         setDefaults();
@@ -80,10 +88,11 @@ public class DMUserInterface extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         fileMenu_exitBtn = new javax.swing.JMenuItem();
         aboutMenu = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        aboutMenu_showLicense = new javax.swing.JMenuItem();
+        aboutMenu_aboutBtn = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("PDFMerger 0.9 (beta) (c) 2017 D.B.Dressler");
+        setTitle("PDFMerger v1.0 (c) 2017 D.B.Dressler");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setName("MainFrame"); // NOI18N
         setResizable(false);
@@ -197,8 +206,21 @@ public class DMUserInterface extends javax.swing.JFrame {
 
         aboutMenu.setText("About");
 
-        jMenuItem4.setText("jMenuItem4");
-        aboutMenu.add(jMenuItem4);
+        aboutMenu_showLicense.setText("License");
+        aboutMenu_showLicense.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenu_showLicenseActionPerformed(evt);
+            }
+        });
+        aboutMenu.add(aboutMenu_showLicense);
+
+        aboutMenu_aboutBtn.setText("About");
+        aboutMenu_aboutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenu_aboutBtnActionPerformed(evt);
+            }
+        });
+        aboutMenu.add(aboutMenu_aboutBtn);
 
         jMenuBar1.add(aboutMenu);
 
@@ -230,7 +252,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(140, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -262,6 +284,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         removeButton.setEnabled(removeEnabled);
         // Disable merge button
         mergeButton.setEnabled(mergeEnabled);
+        //notifications.add("Click add and select a file.\nReady...");
         statusPane.setText("Click add and select a file.\nReady...");
         updateGUI();
     }
@@ -275,15 +298,15 @@ public class DMUserInterface extends javax.swing.JFrame {
         // Get list of documents in memory
         ArrayList<String> localDocumentList = merger.getList();
         // Clear the Paths displayed in GUI
-        documentPaths.clear();
+        DOCUMENT_PATHS.clear();
         
         // Add all documents to GUI
         for(int i = 0; i < localDocumentList.size(); i++){
-            documentPaths.add(i, localDocumentList.get(i));
+            DOCUMENT_PATHS.add(i, localDocumentList.get(i));
         }
         
         // Add to JLIst - actually displays in GUI
-        fileList.setModel(documentPaths);
+        fileList.setModel(DOCUMENT_PATHS);
         
         // Check if dummy file name present
         boolean isPlaceHolderText = true;
@@ -293,11 +316,11 @@ public class DMUserInterface extends javax.swing.JFrame {
         
         // Enable/Disable buttons
         //if 1 documents in list and it's not the placeholder
-        if(documentPaths.size() == 1 && !isPlaceHolderText){
+        if(DOCUMENT_PATHS.size() == 1 && !isPlaceHolderText){
             // Enable remove button
             removeEnabled = true;
             mergeEnabled = false;
-        } else if(documentPaths.size() > 1){ //more than 1 file present
+        } else if(DOCUMENT_PATHS.size() > 1){ //more than 1 file present
             // Enable remove and merge
             removeEnabled = true;
             mergeEnabled = true;
@@ -325,7 +348,7 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void moveDownButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveDownButtonActionPerformed
         
-        if(fileList.getSelectedIndex() < documentPaths.size()){
+        if(fileList.getSelectedIndex() < DOCUMENT_PATHS.size()){
             merger.moveFileDown(fileList.getSelectedIndex());
             updateGUI();
         }
@@ -406,6 +429,21 @@ public class DMUserInterface extends javax.swing.JFrame {
         mergeFunctionality();
     }//GEN-LAST:event_fileMenu_mergeBtnActionPerformed
 
+    private void aboutMenu_aboutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenu_aboutBtnActionPerformed
+        
+        JOptionPane.showMessageDialog(null, "A utility program for merging pdfs. "
+                + "\n(c) 2017 D.B. Dressler.", "About PDF Merger",JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_aboutMenu_aboutBtnActionPerformed
+
+    private void aboutMenu_showLicenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenu_showLicenseActionPerformed
+        File license = new File(LICENSE_LOC);
+        try {
+            java.awt.Desktop.getDesktop().edit(license);
+        } catch (IOException ex) {
+            Logger.getLogger(DMUserInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_aboutMenu_showLicenseActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -447,6 +485,7 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void addFunctionality(){
         String filePath = null;
+        
         // File Chooser
         JFileChooser chooser = new JFileChooser();
         // Multi file selector
@@ -462,14 +501,15 @@ public class DMUserInterface extends javax.swing.JFrame {
             for(int i = 0; i < filesToOpen.length; i++){
                 filePath = filesToOpen[i].getAbsolutePath();
                 File locFile = filesToOpen[i];
-                //statusPane.setText("Adding: " + filePath);
+                // check if valid file 
                 if(filePath.toLowerCase().substring(filePath.length()-3, 
                         filePath.length()).equals("pdf") && locFile.length() != 0){
+                    
+                    // add file 
                     merger.addFilesToList(filePath);
                     statusPane.setText("File added: " + filePath);
-                } else {
+                } else { // not valid pdf
                     statusPane.setText("File must be PDF.");
-                    // throw an error here
                 }
             }
          }
@@ -498,7 +538,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         
         merger.setOutputPath(outputPath);// Set the output path
         merger.mergeFiles(); // Merge the files
-        documentPaths.clear(); // Clear documentList
+        DOCUMENT_PATHS.clear(); // Clear documentList
         merger.clearLists(); // Clear merger lists
         statusPane.setText("File written to: " + outputPath); // Notify user
         updateGUI(); // Update gui
@@ -506,6 +546,8 @@ public class DMUserInterface extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
+    private javax.swing.JMenuItem aboutMenu_aboutBtn;
+    private javax.swing.JMenuItem aboutMenu_showLicense;
     private javax.swing.JButton addButton;
     private javax.swing.JLabel docCountLabel;
     private javax.swing.JList<String> fileList;
@@ -517,7 +559,6 @@ public class DMUserInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
