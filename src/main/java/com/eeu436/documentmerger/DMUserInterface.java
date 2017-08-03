@@ -65,9 +65,12 @@ public class DMUserInterface extends javax.swing.JFrame {
         docCountLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        fileMenu_btnAdd = new javax.swing.JMenuItem();
+        fileMenu_mergeBtn = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        fileMenu_exitBtn = new javax.swing.JMenuItem();
         aboutMenu = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PDFMerger 0.9 (beta) (c) 2017 D.B.Dressler");
@@ -155,15 +158,32 @@ public class DMUserInterface extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        jMenu3.setText("jMenu3");
-        fileMenu.add(jMenu3);
+        fileMenu_btnAdd.setText("Add File");
+        fileMenu_btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_btnAddActionPerformed(evt);
+            }
+        });
+        fileMenu.add(fileMenu_btnAdd);
+
+        fileMenu_mergeBtn.setText("Merge Files");
+        fileMenu.add(fileMenu_mergeBtn);
+        fileMenu.add(jSeparator1);
+
+        fileMenu_exitBtn.setText("Exit");
+        fileMenu_exitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_exitBtnActionPerformed(evt);
+            }
+        });
+        fileMenu.add(fileMenu_exitBtn);
 
         jMenuBar1.add(fileMenu);
 
         aboutMenu.setText("About");
 
-        jMenu4.setText("jMenu4");
-        aboutMenu.add(jMenu4);
+        jMenuItem4.setText("jMenuItem4");
+        aboutMenu.add(jMenuItem4);
 
         jMenuBar1.add(aboutMenu);
 
@@ -276,6 +296,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         // Enable/Disable buttons
         mergeButton.setEnabled(mergeEnabled);
         removeButton.setEnabled(removeEnabled);
+        fileMenu_mergeBtn.setEnabled(mergeEnabled);
         // Display # of documents
         docCountLabel.setText(Integer.toString(merger.getDocumentCount()));
         // Display total # of pages
@@ -300,33 +321,8 @@ public class DMUserInterface extends javax.swing.JFrame {
      * @param evt 
      */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        // TODO add your handling code here:
-        String filePath = null;
         
-        // File Chooser
-        JFileChooser chooser = new JFileChooser();
-        chooser.setMultiSelectionEnabled(true);
-        File[] filesToOpen; //= new File[1];
-        int returnVal = chooser.showOpenDialog(jMenu3);
-        if (returnVal == JFileChooser.APPROVE_OPTION){
-            filesToOpen = chooser.getSelectedFiles();
-            
-            for(int i = 0; i < filesToOpen.length; i++){
-                filePath = filesToOpen[i].getAbsolutePath();
-                File locFile = filesToOpen[i];
-                //statusPane.setText("Adding: " + filePath);
-                if(filePath.toLowerCase().substring(filePath.length()-3, 
-                        filePath.length()).equals("pdf") && locFile.length() != 0){
-                    merger.addFilesToList(filePath);
-                    statusPane.setText("File added: " + filePath);
-                } else {
-                    statusPane.setText("File must be PDF.");
-                    // throw an error here
-                }
-            }
-         }
-        // update list
-        updateGUI();
+        addFunctionality();
     }//GEN-LAST:event_addButtonActionPerformed
 
     /**
@@ -355,29 +351,7 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void mergeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeButtonActionPerformed
         
-        // Open file chooser dialog
-        JFileChooser chooser = new JFileChooser();
-        chooser.showSaveDialog(jMenu3);
-        // Get file path
-        String outputPath = chooser.getSelectedFile().toString();
-        // Check if user specified that file extension is .pdf
-        if(!outputPath.toLowerCase().substring(outputPath.length()-3, outputPath.length()).equals("pdf")){
-            // Append .pdf to output file
-            outputPath += ".pdf";
-        }
-        
-        // Set the output path
-        merger.setOutputPath(outputPath);
-        // Merge the files
-        merger.mergeFiles();
-        // Clear documentList
-        documentPaths.clear();
-        // Clear merger lists
-        merger.clearLists();
-        // Notify user
-        statusPane.setText("File written to: " + outputPath);
-        // Update gui
-        updateGUI();
+        mergeFunctionality();
     }//GEN-LAST:event_mergeButtonActionPerformed
 
     /**
@@ -392,6 +366,14 @@ public class DMUserInterface extends javax.swing.JFrame {
             updateGUI();
         }
     }//GEN-LAST:event_moveUpButtonActionPerformed
+
+    private void fileMenu_btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_btnAddActionPerformed
+        addFunctionality();
+    }//GEN-LAST:event_fileMenu_btnAddActionPerformed
+
+    private void fileMenu_exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_exitBtnActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_fileMenu_exitBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -428,6 +410,67 @@ public class DMUserInterface extends javax.swing.JFrame {
             }
         });
     }
+    
+    /**
+     * Adds Files.
+     */
+    private void addFunctionality(){
+        String filePath = null;
+        // File Chooser
+        JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(true);
+        File[] filesToOpen; //= new File[1];
+        int returnVal = chooser.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            filesToOpen = chooser.getSelectedFiles();
+            
+            for(int i = 0; i < filesToOpen.length; i++){
+                filePath = filesToOpen[i].getAbsolutePath();
+                File locFile = filesToOpen[i];
+                //statusPane.setText("Adding: " + filePath);
+                if(filePath.toLowerCase().substring(filePath.length()-3, 
+                        filePath.length()).equals("pdf") && locFile.length() != 0){
+                    merger.addFilesToList(filePath);
+                    statusPane.setText("File added: " + filePath);
+                } else {
+                    statusPane.setText("File must be PDF.");
+                    // throw an error here
+                }
+            }
+         }
+        // update list
+        updateGUI();
+    }
+    
+    /**
+     * Merges files.
+     */
+    private void mergeFunctionality(){
+        
+        // Open file chooser dialog
+        JFileChooser chooser = new JFileChooser();
+        chooser.showSaveDialog(null);
+        // Get file path
+        String outputPath = chooser.getSelectedFile().toString();
+        // Check if user specified that file extension is .pdf
+        if(!outputPath.toLowerCase().substring(outputPath.length()-3, outputPath.length()).equals("pdf")){
+            // Append .pdf to output file
+            outputPath += ".pdf";
+        }
+        
+        // Set the output path
+        merger.setOutputPath(outputPath);
+        // Merge the files
+        merger.mergeFiles();
+        // Clear documentList
+        documentPaths.clear();
+        // Clear merger lists
+        merger.clearLists();
+        // Notify user
+        statusPane.setText("File written to: " + outputPath);
+        // Update gui
+        updateGUI();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
@@ -435,15 +478,18 @@ public class DMUserInterface extends javax.swing.JFrame {
     private javax.swing.JLabel docCountLabel;
     private javax.swing.JList<String> fileList;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem fileMenu_btnAdd;
+    private javax.swing.JMenuItem fileMenu_exitBtn;
+    private javax.swing.JMenuItem fileMenu_mergeBtn;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JButton mergeButton;
     private javax.swing.JButton moveDownButton;
     private javax.swing.JButton moveUpButton;

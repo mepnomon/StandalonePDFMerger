@@ -89,6 +89,7 @@ public class DocumentMerger {
             
             // Loops until unique file name found
             while(!fileNameVerified){
+                // Create temp file
                 File f = new File(outputPath);
                 
                 // Check if the file exists
@@ -105,10 +106,8 @@ public class DocumentMerger {
             }
             // Write to file
             outputDocument.save(outputPath);
-            
             // Close document
             outputDocument.close();
-            
             // Close all documents in list, PDFBox will flag error if not.
             for(PDDocument d : documentList){
                 d.close();
