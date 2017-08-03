@@ -152,6 +152,12 @@ public class DocumentMerger {
     public String removeFileFromList(int index){
         
         String retVal = documentNames.get(index);
+        PDDocument temp = documentList.get(index);
+        try {
+            temp.close();
+        } catch (IOException ex) {
+            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
+        }
         documentList.remove(index);
         documentNames.remove(index);
         return retVal;

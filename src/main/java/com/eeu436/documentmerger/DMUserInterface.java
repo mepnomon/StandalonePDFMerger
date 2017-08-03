@@ -257,7 +257,7 @@ public class DMUserInterface extends javax.swing.JFrame {
         }
         
         // Enable/Disable buttons
-        //if 1 documents in list and it's not the dummy
+        //if 1 documents in list and it's not the placeholder
         if(documentPaths.size() == 1 && !isPlaceHolderText){
             // Enable remove button
             removeEnabled = true;
@@ -335,10 +335,17 @@ public class DMUserInterface extends javax.swing.JFrame {
      */
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         
-        // Remove from List
-        String filePath = merger.removeFileFromList(fileList.getSelectedIndex());
-        // Inform user
-        statusPane.setText("File removed: " + filePath);
+        String filePath = null;
+        int[] selectionList = fileList.getSelectedIndices();
+        for(int i = 0; i < selectionList.length; i++){
+            
+            // Adjust location
+            int loc = (selectionList[i] - i);
+            // Remove
+            filePath = merger.removeFileFromList(loc);
+            // Prompt user
+            statusPane.setText("File removed: " + filePath);
+        }
         updateGUI();
     }//GEN-LAST:event_removeButtonActionPerformed
 
