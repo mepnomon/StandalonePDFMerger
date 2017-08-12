@@ -245,9 +245,36 @@ public class DocumentMerger {
      * @param index the index
      * @return A document name.
      */
-    public String getElementFromDocumentList(int index){
+    public String getDocumentNameFromList(int index){
         // return document name at index
         return DOCUMENT_NAMES.get(index);
+    }
+    
+    /**
+     * Replace an existing document with a new document
+     * @param index the document's index
+     * @param newDoc the new document to be inserted
+     */
+    public void setDocumentInList(int index, PDDocument newDoc){
+        
+        try {
+            // Close old document
+            DOCUMENT_LIST.get(index).close();
+        } catch (IOException ex) {
+            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // Add new document
+        DOCUMENT_LIST.set(index, newDoc);
+    }
+    
+    /**
+     * Get a document from the list
+     * @param index the index number
+     * @return a PDDocument
+     */
+    public PDDocument getDocumentFromDocumentList(int index){
+        
+        return DOCUMENT_LIST.get(index);
     }
     
     /**
