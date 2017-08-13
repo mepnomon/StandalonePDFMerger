@@ -1,6 +1,25 @@
+/*
+    Copyright 2017, D.B. Dressler
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ */
 package com.eeu436.documenteditor;
-//imports
+
+// Imports
 import com.eeu436.documentmerger.DocumentMerger;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -17,47 +36,88 @@ public class DocumentEditor extends DocumentMerger {
      */
     public DocumentEditor(){
         
+        // super call not necessary, 0 param
     }
     
     
     /**
      * Removes a page from a document.
-     * @param pageNum 
+     * @param docIndex identifies the document
+     * @param pageNum page to be removed
      */
-    public void removePageFromDocument(int pageNum){
-        //TODO: write code
+    public void removePageFromDocument(int docIndex ,int pageNum){
+
+        // get the document
+        PDDocument tempDoc = super.getDocumentFromDocumentList(docIndex);
+        
+        // If only 1 page in document
+        if(tempDoc.getNumberOfPages() == 1){
+            // Remove the document
+            super.removeFileFromList(docIndex);
+        
+        } else { // If more than 1 page
+            
+            // Remove specific page
+            tempDoc.removePage(pageNum);
+            
+            // Return altered document to list
+            super.setDocumentInList(docIndex, tempDoc);
+        }
+        
+        try {
+            // Close the temp document
+            tempDoc.close();
+        } catch (IOException ex) {
+            Logger.getLogger(DocumentEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
      * Inserts a page or multiple pages into a document
-     * @param splitIndex
-     * @param insertPages
+     * @param docIndex identifies the document
+     * @param addIndex location the new page will be added to
+     * @param insertPages the page/pages to be inserted
      */
-    public void insertPageToDocument(int splitIndex, PDDocument insertPages){
-        //TODO: write code
+    public void insertPageToDocument(int docIndex, int addIndex, PDDocument insertPages){
+       
+        // TODO: write code
+        // if at front, simply append root document
+        // if at last page, simply append to root document
+        // get document
+        // split at addIndex
+        // append document to 1st document
+        // for loop , traverse up to index page, then add new pdf, then add remaining pdf
+        // merge
+        // add 2nd document
     }
     
     /**
      *
+     * @param docIndex
      * @param splitIndex
      */
-    public void splitDocument(int splitIndex){
-        //TODO: write code   
+    public void splitDocument(int docIndex, int splitIndex){
+        
+        // TODO: write code
+        // get document
+        // split document at index
+        // store 1st document at old position
+        // store 2nd document at old position +1
     }
     
     /**
      * Convert a .docx to a pdf
      */
     public void convertDocumentToPDF(){
-        //TODO: write code   
+        // TODO: write code   
     }
-    
+  
     /**
      * Previews a document.
      */
     public void previewMergedDocument(){
-        //TODO: write code   
-        //just for testing
+        // TODO: write code   
+        // just for testing
         int element = 0;
         super.getDocumentNameFromList(element);
         
