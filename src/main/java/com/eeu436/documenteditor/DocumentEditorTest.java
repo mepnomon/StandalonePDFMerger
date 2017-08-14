@@ -42,7 +42,10 @@ public class DocumentEditorTest {
         editor.insertPageToDocument(1, 2, editor.getDocumentFromDocumentList(0));
         System.out.println("Pages: " + editor.getTotalPages());
         System.out.println("Docs: " + editor.getDocumentCount());
-        // needs a path
+        
+        editor.rotatePage(1, 2, 90);
+        editor.rotateDocument(1, 90);
+        // Merge
         editor.setOutputPath("src\\main\\resources\\testfiles\\output.pdf");
         editor.mergeFiles();
     }

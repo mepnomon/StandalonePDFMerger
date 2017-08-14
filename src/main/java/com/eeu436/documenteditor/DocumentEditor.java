@@ -17,9 +17,6 @@ package com.eeu436.documenteditor;
 
 // Imports
 import com.eeu436.documentmerger.DocumentMerger;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -72,24 +69,29 @@ public class DocumentEditor extends DocumentMerger {
      */
     public void insertPageToDocument(int docIndex, int addIndex, PDDocument insertDoc){
        
-        // TODO: write code
         // Retrieve main file
         PDDocument mainDoc = super.getDocumentFromDocumentList(docIndex);
-        PDDocument temp = new PDDocument();
+        // Calculate new Document size
         int newDocSize = mainDoc.getNumberOfPages() + insertDoc.getNumberOfPages();
-            
+        
+        // Initialize control variables
         int j = 0, k = 0;
-        // Normal case
+        // Declare new document
+        PDDocument temp = new PDDocument();
+        // Traverse entire document
         for(int i = 0; i < newDocSize; i++){
             
+            // If positions match insert document's
             if(i >= addIndex && i < addIndex+insertDoc.getNumberOfPages()){
+                // insert new document
                 temp.addPage(insertDoc.getPage(k));
                 k++;
-            } else {
+            } else { // insert orginal document
                 temp.addPage(mainDoc.getPage(j));
                 j++;
             }
         }
+        // Store document
         super.setDocumentInList(docIndex, temp);
     }
     
@@ -101,18 +103,33 @@ public class DocumentEditor extends DocumentMerger {
     public void splitDocument(int docIndex, int splitIndex){
         
         // TODO: write code
-        // get document
-        // split document at index
-        // store 1st document at old position
-        // store 2nd document at old position +1
     }
     
-    public void rotatePage(){
+    /**
+     * Rotates a single page in a document.
+     * @param docIndex the document's location
+     * @param pageIndex the page
+     * @param rotateDeg the degrees to rotate (clockwise)
+     */
+    public void rotatePage(int docIndex, int pageIndex, int rotateDeg){
         
+        super.getDocumentFromDocumentList(docIndex).getPage(pageIndex)
+                .setRotation(rotateDeg);
     }
     
-    public void rotateDocument(){
+    /**
+     * Rotates all pages of a document.
+     * @param docIndex the document's location
+     * @param rotateDeg the degrees to rotate (clockwise)
+     */
+    public void rotateDocument(int docIndex,int rotateDeg){
         
+        int docSize = super.getDocumentFromDocumentList(docIndex).getNumberOfPages();
+    
+        for(int i = 0; i < docSize; i++){
+            super.getDocumentFromDocumentList(docIndex).getPage(i)
+                .setRotation(rotateDeg);
+        }
     }
     
     /**
