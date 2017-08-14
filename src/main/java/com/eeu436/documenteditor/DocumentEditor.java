@@ -47,7 +47,7 @@ public class DocumentEditor extends DocumentMerger {
      */
     public void removePageFromDocument(int docIndex ,int pageNum){
 
-        // get the document
+        // Get the document
         PDDocument tempDoc = super.getDocumentFromDocumentList(docIndex);
         
         // If only 1 page in document
@@ -58,17 +58,9 @@ public class DocumentEditor extends DocumentMerger {
         } else { // If more than 1 page
             
             // Remove specific page
-            tempDoc.removePage(pageNum);
-            
+            tempDoc.removePage(pageNum);   
             // Return altered document to list
             super.setDocumentInList(docIndex, tempDoc);
-        }
-        
-        try {
-            // Close the temp document
-            tempDoc.close();
-        } catch (IOException ex) {
-            Logger.getLogger(DocumentEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
