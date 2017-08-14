@@ -41,7 +41,7 @@ public class DocumentMerger {
     private final ArrayList<String> DOCUMENT_NAMES;
     private PDDocument outputDocument;
     private String outputPath = null;
-    final String PLACEHOLDER_TEXT = "Your documents will appear in this list...";
+    final public String PLACEHOLDER_TEXT = "Your documents will appear in this list...";
     
    
     /**
@@ -73,7 +73,7 @@ public class DocumentMerger {
         
         // If document lst is empty
         if(DOCUMENT_LIST.isEmpty()){
-            return 0;
+            return retVal;
         }
         
         // Aggregate number of pages
@@ -258,15 +258,8 @@ public class DocumentMerger {
      * @param newDoc the new document to be inserted
      */
     public void setDocumentInList(int index, PDDocument newDoc){
-        
-//        try {
-//            // Close old document
-//            DOCUMENT_LIST.get(index).close();
-//        } catch (IOException ex) {
-//            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        // Add new document
-        DOCUMENT_LIST.set(index, newDoc);
+
+       DOCUMENT_LIST.set(index, newDoc);
     }
     
     /**

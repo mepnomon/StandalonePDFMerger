@@ -96,7 +96,7 @@ public class DocumentEditor extends DocumentMerger {
     }
     
     /**
-     *
+     * Splits a document.
      * @param docIndex
      * @param splitIndex
      */
