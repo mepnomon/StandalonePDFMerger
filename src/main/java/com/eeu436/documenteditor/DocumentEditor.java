@@ -76,19 +76,29 @@ public class DocumentEditor extends DocumentMerger {
      * Inserts a page or multiple pages into a document
      * @param docIndex identifies the document
      * @param addIndex location the new page will be added to
-     * @param insertPages the page/pages to be inserted
+     * @param insertDoc the page/pages to be inserted
      */
-    public void insertPageToDocument(int docIndex, int addIndex, PDDocument insertPages){
+    public void insertPageToDocument(int docIndex, int addIndex, PDDocument insertDoc){
        
         // TODO: write code
-        // if at front, simply append root document
-        // if at last page, simply append to root document
-        // get document
-        // split at addIndex
-        // append document to 1st document
-        // for loop , traverse up to index page, then add new pdf, then add remaining pdf
-        // merge
-        // add 2nd document
+        // Retrieve main file
+        PDDocument mainDoc = super.getDocumentFromDocumentList(docIndex);
+        PDDocument temp = new PDDocument();
+        int newDocSize = mainDoc.getNumberOfPages() + insertDoc.getNumberOfPages();
+            
+        int j = 0, k = 0;
+        // Normal case
+        for(int i = 0; i < newDocSize; i++){
+            
+            if(i >= addIndex && i < addIndex+insertDoc.getNumberOfPages()){
+                temp.addPage(insertDoc.getPage(k));
+                k++;
+            } else {
+                temp.addPage(mainDoc.getPage(j));
+                j++;
+            }
+        }
+        super.setDocumentInList(docIndex, temp);
     }
     
     /**
@@ -103,6 +113,14 @@ public class DocumentEditor extends DocumentMerger {
         // split document at index
         // store 1st document at old position
         // store 2nd document at old position +1
+    }
+    
+    public void rotatePage(){
+        
+    }
+    
+    public void rotateDocument(){
+        
     }
     
     /**

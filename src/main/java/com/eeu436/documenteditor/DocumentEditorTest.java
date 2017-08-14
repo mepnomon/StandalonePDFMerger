@@ -18,7 +18,7 @@ public class DocumentEditorTest {
     public static void main(String[] args){
         
         // file paths
-        String filePath = "C:\\Users\\Mepnomon\\Desktop\\DocumentMerger\\BSC_CS_Degree_DDressler.pdf";
+        String filePath = "src\\main\\resources\\testfiles\\scrypt.pdf";
         // new editor
         DocumentEditor editor = new DocumentEditor();
         // add an item
@@ -26,15 +26,25 @@ public class DocumentEditorTest {
         // list the items
         printList(editor);
         // Add multi-page document
-        filePath = "C:\\Users\\Mepnomon\\Desktop\\DocumentMerger\\Narf.pdf";
+        filePath = "src\\main\\resources\\testfiles\\China Visa Fees.pdf";
         editor.addFilesToList(filePath);
         printList(editor);
         // Get the page count
         System.out.println("Pages: " + editor.getTotalPages());
+        System.out.println("Docs: " + editor.getDocumentCount());
         // Remove a page from a file
-        editor.removePageFromDocument(1, 2);
+        //editor.removePageFromDocument(1, 2);
         // Get the page count
         System.out.println("Pages: " + editor.getTotalPages());
+        System.out.println("Docs: " + editor.getDocumentCount());
+        printList(editor);
+        // add degree to the 2nd page of the document
+        editor.insertPageToDocument(1, 2, editor.getDocumentFromDocumentList(0));
+//        System.out.println("Pages: " + editor.getTotalPages());
+//        System.out.println("Docs: " + editor.getDocumentCount());
+        // needs a path
+        editor.setOutputPath("src\\main\\resources\\testfiles\\output.pdf");
+        editor.mergeFiles();
     }
     
     static void printList(DocumentEditor editor){

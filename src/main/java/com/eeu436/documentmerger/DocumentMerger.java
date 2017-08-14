@@ -29,6 +29,7 @@ import org.apache.pdfbox.preflight.ValidationResult;
 import org.apache.pdfbox.preflight.parser.PreflightParser;
 
 
+
 /**
  * A utility program to merge PDF documents.
  * @author D.B. Dressler
@@ -119,10 +120,11 @@ public class DocumentMerger {
                     fileNameVerified = true;
                 }
             }
+            
             // Write to file
             outputDocument.save(outputPath);
             // Close document
-            outputDocument.close();
+            //outputDocument.close();
             // Close all documents in list, PDFBox will flag error if not.
             for(PDDocument d : DOCUMENT_LIST){
                 d.close();
@@ -257,13 +259,13 @@ public class DocumentMerger {
      */
     public void setDocumentInList(int index, PDDocument newDoc){
         
-        try {
-            // Close old document
-            DOCUMENT_LIST.get(index).close();
-        } catch (IOException ex) {
-            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        // Add new document
+//        try {
+//            // Close old document
+//            DOCUMENT_LIST.get(index).close();
+//        } catch (IOException ex) {
+//            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        // Add new document
         DOCUMENT_LIST.set(index, newDoc);
     }
     
@@ -297,7 +299,7 @@ public class DocumentMerger {
     //ISO 19005 VALIDATION tools... not necessary
     /**
      * Uses PDFBox PreFlight to check if PDF is compliant with
-     * ISO-19005
+     * ISO-19005í
      * @param filePath
      * @return if pdf is ISO 19005 compliant.
      */
@@ -326,19 +328,22 @@ public class DocumentMerger {
             throw new NullPointerException("filename shouldn't be null");
         }
         
-        try{
-            File preflightFile = new File(filePath);
-            PreflightParser parser = new PreflightParser(preflightFile);
+        File preflightFile = new File(filePath);
+        PreflightParser parser;
+        try {
+            parser = new PreflightParser(preflightFile);
             parser.setLenient(true);
             parser.parse();
             try(PreflightDocument document = parser.getPreflightDocument()){
                 document.validate();
                 ValidationResult result = document.getResult();
                 return Optional.of(result);
+            } catch (IOException ex) {
+                Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch(IOException ex){
-            System.out.println("Error no file");
-            return Optional.empty();
+        } catch (IOException ex) {
+            Logger.getLogger(DocumentMerger.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 }
