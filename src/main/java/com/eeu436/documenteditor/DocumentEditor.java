@@ -57,7 +57,7 @@ public class DocumentEditor extends DocumentMerger {
             // Remove specific page
             tempDoc.removePage(pageNum);   
             // Return altered document to list
-            super.setDocumentInList(docIndex, tempDoc);
+            super.setDocumentInDocumentList(docIndex, tempDoc);
         }
     }
     
@@ -92,17 +92,47 @@ public class DocumentEditor extends DocumentMerger {
             }
         }
         // Store document
-        super.setDocumentInList(docIndex, temp);
+        super.setDocumentInDocumentList(docIndex, temp);
     }
     
     /**
      * Splits a document.
-     * @param docIndex
-     * @param splitIndex
+     * @param docIndex position of the document
+     * @param splitIndex page the document is to be split on
      */
     public void splitDocument(int docIndex, int splitIndex){
         
         // TODO: write code
+        PDDocument mainDocument = super.getDocumentFromDocumentList(docIndex);
+        PDDocument firstDocument = new PDDocument();
+        PDDocument secondDocument = new PDDocument();
+        
+        // ensure index > 0 < document size
+        
+        // Traverse all pages
+        for(int i = 0; i < mainDocument.getNumberOfPages(); i++){
+            
+            if(i < splitIndex){ // add to first document
+                firstDocument.addPage(mainDocument.getPage(i));
+            } else { // add to second document
+                secondDocument.addPage(mainDocument.getPage(i));
+            }
+        }
+        
+        String title = super.getDocumentNameFromList(docIndex);
+        title = title.substring(0, title.length() - 4);
+        System.out.println("Title: " + title);
+        
+        // Enumerte split documents
+        int splitCount = 0;
+        // do some string manipulation here
+        
+        // Add split documents to end of document list
+        super.addDocumentToDocumentList(firstDocument);
+        super.addDocumentNameInList(title + "_split_" + splitCount);
+        ++splitCount;
+        super.addDocumentToDocumentList(secondDocument);
+        super.addDocumentNameInList(title  + "_split_" + splitCount);
     }
     
     /**

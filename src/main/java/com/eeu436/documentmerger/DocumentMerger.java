@@ -253,13 +253,34 @@ public class DocumentMerger {
     }
     
     /**
+     * Adds title to document list.
+     * @param name  name assigned to document
+     */
+    public void addDocumentNameInList(String name){
+        
+        DOCUMENT_NAMES.add(name);
+    }
+    
+    /**
      * Replace an existing document with a new document
      * @param index the document's index
      * @param newDoc the new document to be inserted
      */
-    public void setDocumentInList(int index, PDDocument newDoc){
+    public void setDocumentInDocumentList(int index, PDDocument newDoc){
 
        DOCUMENT_LIST.set(index, newDoc);
+    }
+    
+    /**
+     * Appends a new document to the list containing documents.
+     * @param newDoc 
+     */
+    public void addDocumentToDocumentList(PDDocument newDoc){
+        
+        // if path is null
+        // then get the name
+        
+        DOCUMENT_LIST.add(newDoc);
     }
     
     /**

@@ -43,8 +43,24 @@ public class DocumentEditorTest {
         System.out.println("Pages: " + editor.getTotalPages());
         System.out.println("Docs: " + editor.getDocumentCount());
         
+        // rotate a page
         editor.rotatePage(1, 2, 90);
+        // rotate an entire document
         editor.rotateDocument(1, 90);
+        // split a document
+        editor.splitDocument(1, 4);
+        
+        // check how many documents are in list
+        System.out.println("Docs: " + editor.getDocumentCount());
+        
+        // print the new list
+        System.out.println("");
+        printList(editor);
+        System.out.println("");
+        
+        // rotate new documents
+        editor.rotateDocument(2, 0);
+        
         // Merge
         editor.setOutputPath("src\\main\\resources\\testfiles\\output.pdf");
         editor.mergeFiles();
