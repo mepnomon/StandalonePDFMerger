@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import org.apache.pdfbox.rendering.PageDrawer;
 
 /**
  * User Interface for Document Merger
@@ -40,6 +39,8 @@ public class DEUserInterface extends javax.swing.JFrame {
     private final DefaultListModel DOCUMENT_PATHS;
     private final String LICENSE_LOC = "src\\main\\resources\\License\\LICENSE.txt";
     private ArrayList<String> notifications;
+    private PDFViewerComponent pdfViewer;
+    
     /**
      * Creates new form DMUserInterface
      */
@@ -52,8 +53,11 @@ public class DEUserInterface extends javax.swing.JFrame {
         removeEnabled = false;
         // List of document paths
         DOCUMENT_PATHS = new DefaultListModel();
-        
+        // TODO add notifications functionality
         notifications = new ArrayList<>();
+        // Instantiate the PDFViewerComponent
+        pdfViewer = new PDFViewerComponent();
+        // invoke components 
         initComponents();
         // Set gui defaults
         setDefaults();
@@ -329,6 +333,13 @@ public class DEUserInterface extends javax.swing.JFrame {
         mergeButton.setEnabled(mergeEnabled);
         //notifications.add("Click add and select a file.\nReady...");
         statusPane.setText("Click add and select a file.\nReady...");
+        // TODO Repair previewPanel
+        // maybe put it inside a jpanel and load it as a class
+        //System.out.println(previewPanel.getClass());
+        PDFPreviewPanel pane = new PDFPreviewPanel().getInstance();
+        previewPanel = pane;
+        //System.out.println(previewPanel.getClass());
+        
         updateGUI();
     }
     
@@ -382,7 +393,7 @@ public class DEUserInterface extends javax.swing.JFrame {
         docCountLabel.setText(Integer.toString(merger.getDocumentCount()));
         // Display total # of pages
         pageCountLabel.setText(Integer.toString(merger.getTotalPages()));
-        
+        repaint();
     }
     
     /**
@@ -531,19 +542,6 @@ public class DEUserInterface extends javax.swing.JFrame {
                 new DEUserInterface().setVisible(true);
             }
         });
-    }
-    
-    /**
-     * Previews a document
-     */
-    private void previewDocument(int docIndex){
-        // The page to be displayed
-        int page = 0;
-        PageDrawer drawer;
-        //PDFPagePanel foo;
-        //drawer.
-        //previewPanel.add();
-        
     }
     
     /**

@@ -66,7 +66,6 @@ public class PDFViewerComponent extends JComponent{
     @Override
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D)g; //downcasting
-        
         if(documentLoaded){
             try {
                 aRenderer.renderPageToGraphics(pageNum, g2);
@@ -77,10 +76,8 @@ public class PDFViewerComponent extends JComponent{
             }
         } else {
             
-            g2.drawString("Select a document.", 100, 100);
+            g2.drawString("Select a document.", 0, 0);
         }
 
-    }
-    
-    
+    }   
 }
