@@ -41,7 +41,8 @@ public class DocumentMerger {
     private final ArrayList<String> DOCUMENT_NAMES;
     private PDDocument outputDocument;
     private String outputPath = null;
-    final public String PLACEHOLDER_TEXT = "Your documents will appear in this list...";
+    final public String PLACEHOLDER_TEXT = "Your documents will appear in this "
+            + "list...";
     
    
     /**

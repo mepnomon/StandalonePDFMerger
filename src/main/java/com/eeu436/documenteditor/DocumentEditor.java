@@ -17,11 +17,10 @@ package com.eeu436.documenteditor;
 
 // Imports
 import com.eeu436.documentmerger.DocumentMerger;
-import javax.swing.JPanel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
- * A class to preview and edit documents.
+ * A class to edit PDFs.
  * Inherits functionality from Document Merger class.
  * @author D.B. Dressler
  */
@@ -67,12 +66,14 @@ public class DocumentEditor extends DocumentMerger {
      * @param addIndex location the new page will be added to
      * @param insertDoc the page/pages to be inserted
      */
-    public void insertPageToDocument(int docIndex, int addIndex, PDDocument insertDoc){
+    public void insertPageToDocument(int docIndex, int addIndex, 
+            PDDocument insertDoc){
        
         // Retrieve main file
         PDDocument mainDoc = super.getDocumentFromDocumentList(docIndex);
         // Calculate new Document size
-        int newDocSize = mainDoc.getNumberOfPages() + insertDoc.getNumberOfPages();
+        int newDocSize = mainDoc.getNumberOfPages() + 
+                insertDoc.getNumberOfPages();
         
         // Initialize control variables
         int j = 0, k = 0;
@@ -102,12 +103,13 @@ public class DocumentEditor extends DocumentMerger {
      */
     public void splitDocument(int docIndex, int splitIndex){
         
-        // TODO: write code
+        // Local fields
         PDDocument mainDocument = super.getDocumentFromDocumentList(docIndex);
         PDDocument firstDocument = new PDDocument();
         PDDocument secondDocument = new PDDocument();
         
         // ensure index > 0 < document size
+        // ensure in gui logic
         
         // Traverse all pages
         for(int i = 0; i < mainDocument.getNumberOfPages(); i++){
@@ -119,9 +121,9 @@ public class DocumentEditor extends DocumentMerger {
             }
         }
         
+        // Adjust file title
         String title = super.getDocumentNameFromList(docIndex);
-        title = title.substring(0, title.length() - 4);
-        System.out.println("Title: " + title);
+        title = title.substring(0, title.length() - 4);        
         
         // Enumerte split documents
         int splitCount = 0;
@@ -154,8 +156,11 @@ public class DocumentEditor extends DocumentMerger {
      */
     public void rotateDocument(int docIndex,int rotateDeg){
         
-        int docSize = super.getDocumentFromDocumentList(docIndex).getNumberOfPages();
+        // Get Size of the document
+        int docSize = super.getDocumentFromDocumentList(docIndex)
+                .getNumberOfPages();
     
+        // Rotate each page of the document
         for(int i = 0; i < docSize; i++){
             super.getDocumentFromDocumentList(docIndex).getPage(i)
                 .setRotation(rotateDeg);
@@ -167,22 +172,5 @@ public class DocumentEditor extends DocumentMerger {
      */
     public void convertDocumentToPDF(){
         // TODO: write code   
-    }
-  
-    /**
-     * Previews a document.
-     */
-    public void previewMergedDocument(){
-        // TODO: write code   
-        // just for testing
-        int element = 0;
-        super.getDocumentNameFromList(element);
-        
-        /**
-         * local class
-         */
-        class ShowPanel extends JPanel{
-             
-        }
     }
 }

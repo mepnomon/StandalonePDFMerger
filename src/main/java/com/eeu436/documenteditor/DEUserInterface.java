@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.pdfbox.rendering.PageDrawer;
 
 /**
  * User Interface for Document Merger
@@ -82,6 +83,9 @@ public class DEUserInterface extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         pageCountLabel = new javax.swing.JLabel();
         docCountLabel = new javax.swing.JLabel();
+        previewPanel = new javax.swing.JPanel();
+        canvasPrevButton = new javax.swing.JButton();
+        canvasNextButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         fileMenu_btnAdd = new javax.swing.JMenuItem();
@@ -150,11 +154,22 @@ public class DEUserInterface extends javax.swing.JFrame {
 
         docCountLabel.setText("jLabel3");
 
+        javax.swing.GroupLayout previewPanelLayout = new javax.swing.GroupLayout(previewPanel);
+        previewPanel.setLayout(previewPanelLayout);
+        previewPanelLayout.setHorizontalGroup(
+            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 134, Short.MAX_VALUE)
+        );
+        previewPanelLayout.setVerticalGroup(
+            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 181, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -164,17 +179,35 @@ public class DEUserInterface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pageCountLabel)
                 .addGap(15, 15, 15))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(previewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(pageCountLabel)
                     .addComponent(docCountLabel)))
         );
+
+        canvasPrevButton.setText("<-");
+        canvasPrevButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                canvasPrevButtonActionPerformed(evt);
+            }
+        });
+
+        canvasNextButton.setText("->");
+        canvasNextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                canvasNextButtonActionPerformed(evt);
+            }
+        });
 
         fileMenu.setText("File");
 
@@ -240,20 +273,29 @@ public class DEUserInterface extends javax.swing.JFrame {
                         .addComponent(moveUpButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(moveDownButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
                         .addComponent(mergeButton))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(addButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(canvasPrevButton, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)
+                        .addComponent(canvasNextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(canvasPrevButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(canvasNextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -445,6 +487,14 @@ public class DEUserInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_aboutMenu_showLicenseActionPerformed
 
+    private void canvasPrevButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_canvasPrevButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_canvasPrevButtonActionPerformed
+
+    private void canvasNextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_canvasNextButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_canvasNextButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -481,6 +531,19 @@ public class DEUserInterface extends javax.swing.JFrame {
                 new DEUserInterface().setVisible(true);
             }
         });
+    }
+    
+    /**
+     * Previews a document
+     */
+    private void previewDocument(int docIndex){
+        // The page to be displayed
+        int page = 0;
+        PageDrawer drawer;
+        //PDFPagePanel foo;
+        //drawer.
+        //previewPanel.add();
+        
     }
     
     /**
@@ -552,6 +615,8 @@ public class DEUserInterface extends javax.swing.JFrame {
     private javax.swing.JMenuItem aboutMenu_aboutBtn;
     private javax.swing.JMenuItem aboutMenu_showLicense;
     private javax.swing.JButton addButton;
+    private javax.swing.JButton canvasNextButton;
+    private javax.swing.JButton canvasPrevButton;
     private javax.swing.JLabel docCountLabel;
     private javax.swing.JList<String> fileList;
     private javax.swing.JMenu fileMenu;
@@ -570,6 +635,7 @@ public class DEUserInterface extends javax.swing.JFrame {
     private javax.swing.JButton moveDownButton;
     private javax.swing.JButton moveUpButton;
     private javax.swing.JLabel pageCountLabel;
+    private javax.swing.JPanel previewPanel;
     private javax.swing.JButton removeButton;
     private javax.swing.JTextPane statusPane;
     // End of variables declaration//GEN-END:variables
