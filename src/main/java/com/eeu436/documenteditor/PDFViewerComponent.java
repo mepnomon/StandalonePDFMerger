@@ -21,30 +21,36 @@ public class PDFViewerComponent extends JComponent{
     PDFRenderer aRenderer;
     PDPage aPage;
     int pageNum;
-
+    boolean documentLoaded = false;
         
     /**
      * Constructs a PDFViewerComponent with parameters
      * @param aDocument 
      */
     public PDFViewerComponent(PDDocument aDocument){
+        documentLoaded = true;
+        aRenderer = new PDFRenderer(aDocument);
         pageNum = 0;
     }
     
+    /**
+     * Constructs a PDFViewer Component.
+     */
     public PDFViewerComponent(){
         pageNum = 0;
     }
     
     /**
-     * 
+     * Set the document to be viewed.
      * @param aDocument 
      */
     public void setDocumentToView(PDDocument aDocument){
+        documentLoaded = true;
         aRenderer = new PDFRenderer(aDocument);
     }
    
     /**
-     * 
+     * Sets the page to be viewed.
      * @param pageNum 
      */
     public void setPageToView(int pageNum){
@@ -53,19 +59,25 @@ public class PDFViewerComponent extends JComponent{
     
 
     
-    
+    /**
+     * Paint Component override.
+     * @param g graphics engine
+     */
     @Override
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D)g; //downcasting
         
-        // Check if document is loaded
-
-   
-        try {
-            aRenderer.renderPageToGraphics(0, g2);
-        } catch (IOException ex) {
-            Logger.getLogger(PDFViewerComponent.class.getName())
-                    .log(Level.SEVERE, null, ex);
+        if(documentLoaded){
+            try {
+                aRenderer.renderPageToGraphics(pageNum, g2);
+                //aRenderer.renderPageToGraphics(pageNum, g2, TOP_ALIGNMENT);
+            } catch (IOException ex) {
+                Logger.getLogger(PDFViewerComponent.class.getName())
+                        .log(Level.SEVERE, null, ex);
+            }
+        } else {
+            
+            g2.drawString("Select a document.", 100, 100);
         }
 
     }
