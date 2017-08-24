@@ -17,6 +17,7 @@ package com.eeu436.documenteditor;
 
 // imports
 import com.eeu436.documentmerger.*;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
  * User Interface for Document Merger
@@ -40,6 +42,10 @@ public class DEUserInterface extends javax.swing.JFrame {
     private final String LICENSE_LOC = "src\\main\\resources\\License\\LICENSE.txt";
     private ArrayList<String> notifications;
     private PDFViewerComponent pdfViewer;
+    
+    
+    // for test only
+    PDDocument test;
     
     /**
      * Creates new form DMUserInterface
@@ -87,7 +93,6 @@ public class DEUserInterface extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         pageCountLabel = new javax.swing.JLabel();
         docCountLabel = new javax.swing.JLabel();
-        previewPanel = new javax.swing.JPanel();
         canvasPrevButton = new javax.swing.JButton();
         canvasNextButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -158,17 +163,6 @@ public class DEUserInterface extends javax.swing.JFrame {
 
         docCountLabel.setText("jLabel3");
 
-        javax.swing.GroupLayout previewPanelLayout = new javax.swing.GroupLayout(previewPanel);
-        previewPanel.setLayout(previewPanelLayout);
-        previewPanelLayout.setHorizontalGroup(
-            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 134, Short.MAX_VALUE)
-        );
-        previewPanelLayout.setVerticalGroup(
-            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 181, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -183,15 +177,11 @@ public class DEUserInterface extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pageCountLabel)
                 .addGap(15, 15, 15))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(previewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
@@ -288,23 +278,23 @@ public class DEUserInterface extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(canvasPrevButton, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
+                        .addGap(4, 4, 4)
                         .addComponent(canvasNextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(211, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(canvasPrevButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(canvasNextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(addButton)
-                        .addComponent(removeButton)))
+                        .addComponent(removeButton))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -333,12 +323,11 @@ public class DEUserInterface extends javax.swing.JFrame {
         mergeButton.setEnabled(mergeEnabled);
         //notifications.add("Click add and select a file.\nReady...");
         statusPane.setText("Click add and select a file.\nReady...");
-        // TODO Repair previewPanel
-        // maybe put it inside a jpanel and load it as a class
-        //System.out.println(previewPanel.getClass());
-        PDFPreviewPanel pane = new PDFPreviewPanel().getInstance();
-        previewPanel = pane;
-        //System.out.println(previewPanel.getClass());
+        // 
+        PDFPreviewPanel pane = new PDFPreviewPanel();
+        pane.setLocation(410, 10);
+        add(pane);
+        pane.setPageToView(2);
         
         updateGUI();
     }
@@ -633,7 +622,6 @@ public class DEUserInterface extends javax.swing.JFrame {
     private javax.swing.JButton moveDownButton;
     private javax.swing.JButton moveUpButton;
     private javax.swing.JLabel pageCountLabel;
-    private javax.swing.JPanel previewPanel;
     private javax.swing.JButton removeButton;
     private javax.swing.JTextPane statusPane;
     // End of variables declaration//GEN-END:variables

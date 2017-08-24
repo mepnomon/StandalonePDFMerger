@@ -1,5 +1,6 @@
 package com.eeu436.documenteditor;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -57,7 +58,10 @@ public class PDFViewerComponent extends JComponent{
         this.pageNum = pageNum;
     }
     
-
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(135, 180);
+    }
     
     /**
      * Paint Component override.
@@ -68,7 +72,7 @@ public class PDFViewerComponent extends JComponent{
         Graphics2D g2 = (Graphics2D)g; //downcasting
         if(documentLoaded){
             try {
-                aRenderer.renderPageToGraphics(pageNum, g2);
+                aRenderer.renderPageToGraphics(pageNum, g2, .25f);
                 //aRenderer.renderPageToGraphics(pageNum, g2, TOP_ALIGNMENT);
             } catch (IOException ex) {
                 Logger.getLogger(PDFViewerComponent.class.getName())
@@ -78,6 +82,5 @@ public class PDFViewerComponent extends JComponent{
             
             g2.drawString("Select a document.", 0, 0);
         }
-
     }   
 }

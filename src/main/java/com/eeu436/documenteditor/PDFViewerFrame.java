@@ -80,7 +80,7 @@ public class PDFViewerFrame extends JFrame {
         PDFViewerFrame frame = new PDFViewerFrame();
         String filePath = "src\\main\\resources\\testfiles\\scrypt.pdf";
         // Invoke
-        frame.initFrame(); 
+        frame.initFrame();
         frame.loadFile(filePath);
         try {
             Thread.sleep(10000);
